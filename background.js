@@ -1,6 +1,7 @@
 // Copyright (c) 2012 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+// Derivative work by Joe Esposito
 
 var animationFrames = 36;
 var animationSpeed = 10; // ms
@@ -21,6 +22,10 @@ function getGmailUrl() {
   return "https://mail.google.com/mail/";
 }
 
+function getInboxUrl() {
+  return "https://inbox.google.com/";
+}
+
 // Identifier used to debug the possibility of multiple instances of the
 // extension making requests on behalf of a single user.
 function getInstanceId() {
@@ -35,9 +40,9 @@ function getFeedUrl() {
   return getGmailUrl() + "feed/atom?zx=" + encodeURIComponent(getInstanceId());
 }
 
-function isGmailUrl(url) {
-  // Return whether the URL starts with the Gmail prefix.
-  return url.indexOf(getGmailUrl()) == 0;
+function isInboxUrl(url) {
+  // Return whether the URL starts with the Inbox prefix.
+  return url.indexOf(getInboxUrl()) == 0;
 }
 
 // A "loading" animation displayed while we wait for the first response from
@@ -58,7 +63,8 @@ LoadingAnimation.prototype.paintFrame = function() {
   if (this.current_ >= this.maxDot_)
     text += "";
 
-  chrome.browserAction.setBadgeText({text:text});
+  chrome.browserAction.setBadgeBackgroundColor({color: [0, 56, 206, 255]});
+  chrome.browserAction.setBadgeText({text: text});
   this.current_++;
   if (this.current_ == this.maxCount_)
     this.current_ = 0;
@@ -84,12 +90,12 @@ LoadingAnimation.prototype.stop = function() {
 
 function updateIcon() {
   if (!localStorage.hasOwnProperty('unreadCount')) {
-    chrome.browserAction.setIcon({path:"gmail_not_logged_in.png"});
-    chrome.browserAction.setBadgeBackgroundColor({color:[190, 190, 190, 230]});
+    chrome.browserAction.setIcon({path: "inbox_not_logged_in.png"});
+    chrome.browserAction.setBadgeBackgroundColor({color: [190, 190, 190, 230]});
     chrome.browserAction.setBadgeText({text:"?"});
   } else {
-    chrome.browserAction.setIcon({path: "gmail_logged_in.png"});
-    chrome.browserAction.setBadgeBackgroundColor({color:[208, 0, 24, 255]});
+    chrome.browserAction.setIcon({path: "inbox_logged_in.png"});
+    chrome.browserAction.setBadgeBackgroundColor({color: [0, 56, 206, 255]});
     chrome.browserAction.setBadgeText({
       text: localStorage.unreadCount != "0" ? localStorage.unreadCount : ""
     });
@@ -251,16 +257,16 @@ function goToInbox() {
   console.log('Going to inbox...');
   chrome.tabs.getAllInWindow(undefined, function(tabs) {
     for (var i = 0, tab; tab = tabs[i]; i++) {
-      if (tab.url && isGmailUrl(tab.url)) {
-        console.log('Found Gmail tab: ' + tab.url + '. ' +
+      if (tab.url && isInboxUrl(tab.url)) {
+        console.log('Found Inbox tab: ' + tab.url + '. ' +
                     'Focusing and refreshing count...');
         chrome.tabs.update(tab.id, {selected: true});
         startRequest({scheduleRequest:false, showLoadingAnimation:false});
         return;
       }
     }
-    console.log('Could not find Gmail tab. Creating one...');
-    chrome.tabs.create({url: getGmailUrl()});
+    console.log('Could not find Inbox tab. Creating one...');
+    chrome.tabs.create({url: getInboxUrl()});
   });
 }
 
@@ -309,12 +315,12 @@ if (oldChromeVersion) {
 var filters = {
   // TODO(aa): Cannot use urlPrefix because all the url fields lack the protocol
   // part. See crbug.com/140238.
-  url: [{urlContains: getGmailUrl().replace(/^https?\:\/\//, '')}]
+  url: [{urlContains: getInboxUrl().replace(/^https?\:\/\//, '')}]
 };
 
 function onNavigate(details) {
-  if (details.url && isGmailUrl(details.url)) {
-    console.log('Recognized Gmail navigation to: ' + details.url + '.' +
+  if (details.url && isInboxUrl(details.url)) {
+    console.log('Recognized Inbox navigation to: ' + details.url + '.' +
                 'Refreshing count...');
     startRequest({scheduleRequest:false, showLoadingAnimation:false});
   }
