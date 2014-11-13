@@ -3,6 +3,8 @@ Inbox by Gmail Checker
 
 This is a derivative work of the [Google Mail Checker][] to work with Inbox by Gmail.
 
+![Screenshot](screenshot.png)
+
 
 Installation
 ------------
