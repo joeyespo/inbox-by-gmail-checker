@@ -9,12 +9,12 @@ This is a derivative work of the [Google Mail Checker][] to work with Inbox by G
 Installation
 ------------
 
+<a target="_blank" href="https://chrome.google.com/webstore/detail/inbox-by-gmail-checker/mpjmeeikbbgccbjkbfabocnjcaejdpmj">![Try it now](tryitnowbutton.png "Click here to install from the Chrome Web Store")</a>
+
+Or manually:
+
 1. Download or `git clone http://github.com/joeyespo/inbox-by-gmail-checker.git`
-
 2. Open Chrome extensions and click on the `Load unpacked extension` button
-
-  ![Installation](installation.png)
-
 3. Select the downloaded directory
 
 
