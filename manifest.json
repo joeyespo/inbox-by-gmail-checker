@@ -14,10 +14,12 @@
     "persistent": false,
     "page": "background.html"
   },
+  "options_page": "options.html",
   "permissions": [
     "alarms",
     "tabs",
     "webNavigation",
+    "storage",
     "*://*.google.com/"
    ],
   "default_locale": "en"

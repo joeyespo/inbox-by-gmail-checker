@@ -14,16 +14,29 @@ var requestTimeout = 1000 * 2;  // 2 seconds
 var rotation = 0;
 var loadingAnimation = new LoadingAnimation();
 
-// Legacy support for pre-event-pages.
+var options = {
+  defaultUser: 0
+};
+
+// Legacy support for pre-event-pages
 var oldChromeVersion = !chrome.runtime;
 var requestTimerId;
 
+function getUser() {
+  // Appends the /u/ route when default user is set and not equal to 0
+  return options.defaultUser ? ('u/' + options.defaultUser + '/') : '';
+}
+
 function getGmailUrl() {
-  return "https://mail.google.com/mail/";
+  return 'https://mail.google.com/mail/' + getUser();
+}
+
+function getInboxBaseUrl() {
+  return 'https://inbox.google.com/';
 }
 
 function getInboxUrl() {
-  return "https://inbox.google.com/";
+  return getInboxBaseUrl() + getUser();
 }
 
 // Identifier used to debug the possibility of multiple instances of the
@@ -42,7 +55,7 @@ function getFeedUrl() {
 
 function isInboxUrl(url) {
   // Return whether the URL starts with the Inbox prefix.
-  return url.indexOf(getInboxUrl()) == 0;
+  return url.indexOf(getInboxBaseUrl()) == 0;
 }
 
 // A "loading" animation displayed while we wait for the first response from
@@ -304,20 +317,6 @@ function onWatchdog() {
   });
 }
 
-if (oldChromeVersion) {
-  updateIcon();
-  onInit();
-} else {
-  chrome.runtime.onInstalled.addListener(onInit);
-  chrome.alarms.onAlarm.addListener(onAlarm);
-}
-
-var filters = {
-  // TODO(aa): Cannot use urlPrefix because all the url fields lack the protocol
-  // part. See crbug.com/140238.
-  url: [{urlContains: getInboxUrl().replace(/^https?\:\/\//, '')}]
-};
-
 function onNavigate(details) {
   if (details.url && isInboxUrl(details.url)) {
     console.log('Recognized Inbox navigation to: ' + details.url + '.' +
@@ -325,33 +324,78 @@ function onNavigate(details) {
     startRequest({scheduleRequest:false, showLoadingAnimation:false});
   }
 }
-if (chrome.webNavigation && chrome.webNavigation.onDOMContentLoaded &&
-    chrome.webNavigation.onReferenceFragmentUpdated) {
-  chrome.webNavigation.onDOMContentLoaded.addListener(onNavigate, filters);
-  chrome.webNavigation.onReferenceFragmentUpdated.addListener(
-      onNavigate, filters);
-} else {
-  chrome.tabs.onUpdated.addListener(function(_, details) {
-    onNavigate(details);
+
+function loadOptions(callback) {
+  if (!chrome || !chrome.storage || !chrome.storage.sync) {
+    callback(false);
+    return;
+  }
+
+  chrome.storage.sync.get({
+    defaultUser: 0
+  }, function(items) {
+    options.defaultUser = items.defaultUser;
+    callback(true);
   });
 }
 
-chrome.browserAction.onClicked.addListener(goToInbox);
+function refresh() {
+  startRequest({scheduleRequest: true, showLoadingAnimation: true});
+}
 
-if (chrome.runtime && chrome.runtime.onStartup) {
-  chrome.runtime.onStartup.addListener(function() {
-    console.log('Starting browser... updating icon.');
-    startRequest({scheduleRequest:false, showLoadingAnimation:false});
+function main() {
+  if (oldChromeVersion) {
     updateIcon();
-  });
-} else {
-  // This hack is needed because Chrome 22 does not persist browserAction icon
-  // state, and also doesn't expose onStartup. So the icon always starts out in
-  // wrong state. We don't actually use onStartup except as a clue that we're
-  // in a version of Chrome that has this problem.
-  chrome.windows.onCreated.addListener(function() {
-    console.log('Window created... updating icon.');
-    startRequest({scheduleRequest:false, showLoadingAnimation:false});
-    updateIcon();
+    onInit();
+  } else {
+    chrome.runtime.onInstalled.addListener(onInit);
+    chrome.alarms.onAlarm.addListener(onAlarm);
+  }
+
+  var filters = {
+    // TODO(aa): Cannot use urlPrefix because all the url fields lack the protocol
+    // part. See crbug.com/140238.
+    url: [{urlContains: getInboxBaseUrl().replace(/^https?\:\/\//, '')}]
+  };
+
+  if (chrome.webNavigation && chrome.webNavigation.onDOMContentLoaded &&
+      chrome.webNavigation.onReferenceFragmentUpdated) {
+    chrome.webNavigation.onDOMContentLoaded.addListener(onNavigate, filters);
+    chrome.webNavigation.onReferenceFragmentUpdated.addListener(onNavigate, filters);
+  } else {
+    chrome.tabs.onUpdated.addListener(function(_, details) {
+      onNavigate(details);
+    });
+  }
+
+  chrome.browserAction.onClicked.addListener(goToInbox);
+
+  if (chrome.runtime && chrome.runtime.onStartup) {
+    chrome.runtime.onStartup.addListener(function() {
+      console.log('Starting browser... updating icon.');
+      startRequest({scheduleRequest:false, showLoadingAnimation:false});
+      updateIcon();
+    });
+  } else {
+    // This hack is needed because Chrome 22 does not persist browserAction icon
+    // state, and also doesn't expose onStartup. So the icon always starts out in
+    // wrong state. We don't actually use onStartup except as a clue that we're
+    // in a version of Chrome that has this problem.
+    chrome.windows.onCreated.addListener(function() {
+      console.log('Window created... updating icon.');
+      startRequest({scheduleRequest:false, showLoadingAnimation:false});
+      updateIcon();
+    });
+  }
+
+  loadOptions(function () {
+    refresh()
+    chrome.storage.onChanged.addListener(function(changes, namespace) {
+      loadOptions(function () {
+        refresh()
+      });
+    });
   });
 }
+
+main();
