@@ -27,8 +27,12 @@ function getUser() {
   return options.defaultUser ? ('u/' + options.defaultUser + '/') : '';
 }
 
+function getGmailBaseUrl() {
+  return 'https://mail.google.com/';
+}
+
 function getGmailUrl() {
-  return 'https://mail.google.com/mail/' + getUser();
+  return getGmailBaseUrl() + 'mail/' + getUser();
 }
 
 function getInboxBaseUrl() {
@@ -55,7 +59,8 @@ function getFeedUrl() {
 
 function isInboxUrl(url) {
   // Return whether the URL starts with the Inbox prefix.
-  return url.indexOf(getInboxBaseUrl()) == 0;
+  return url.indexOf(getInboxBaseUrl()) === 0 ||
+    url.indexOf(getGmailBaseUrl()) === 0;
 }
 
 // A "loading" animation displayed while we wait for the first response from
