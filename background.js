@@ -24,6 +24,12 @@ var options = {
 var oldChromeVersion = !chrome.runtime;
 var requestTimerId;
 
+function isQuietTime() {
+  var time = new Date();
+  var currentHour = time.getHours();
+  return options.quietHours && options.quietHours.indexOf(currentHour) !== -1;
+}
+
 function getUser() {
   // Appends the /u/ route when default user is set and not equal to 0
   return options.defaultUser ? ('u/' + options.defaultUser + '/') : '';
@@ -114,14 +120,11 @@ function updateIcon() {
     chrome.browserAction.setBadgeBackgroundColor({color: [190, 190, 190, 230]});
     chrome.browserAction.setBadgeText({text:"?"});
   } else {
-    var time = new Date();
-    var currentHour = time.getHours();
-    var quietTime = options.quietHours && options.quietHours.indexOf(currentHour) !== -1;
     var unreadCount = localStorage.unreadCount != '0' ? localStorage.unreadCount : '';
     chrome.browserAction.setIcon({path: "inbox_logged_in.png"});
     chrome.browserAction.setBadgeBackgroundColor({color: [0, 56, 206, 255]});
     chrome.browserAction.setBadgeText({
-      text: (quietTime ? '' : unreadCount)
+      text: (isQuietTime() ? '' : unreadCount)
     });
   }
 }
@@ -237,8 +240,10 @@ function gmailNSResolver(prefix) {
 }
 
 function updateUnreadCount(count) {
-  var changed = localStorage.unreadCount != count;
+  var quietTime = isQuietTime();
+  var changed = localStorage.unreadCount != count || String(localStorage.quietTime) != String(quietTime);
   localStorage.unreadCount = count;
+  localStorage.quietTime = quietTime;
   updateIcon();
   if (changed)
     animateFlip();
