@@ -1,8 +1,12 @@
 function saveOptions(e) {
   e.preventDefault();
+
   var defaultUser = document.getElementById('defaultUser').value;
+  var quietHours = document.getElementById('quietHours').value;
+
   chrome.storage.sync.set({
-    defaultUser: defaultUser
+    defaultUser: defaultUser,
+    quietHours: quietHours
   }, function() {
     // Update status to let user know options were saved.
     var status = document.getElementById('status');
@@ -11,19 +15,23 @@ function saveOptions(e) {
       status.textContent = '';
     }, 3000);
   });
+
   return false;
 }
 
 function restoreOptions() {
   chrome.storage.sync.get({
-    defaultUser: '0'
+    defaultUser: '0',
+    quietHours: ''
   }, function(items) {
     document.getElementById('defaultUser').value = items.defaultUser;
+    document.getElementById('quietHours').value = items.quietHours;
   });
 }
 
 function defaultOptions() {
   document.getElementById('defaultUser').value = 0;
+  document.getElementById('quietHours').value = '';
 }
 
 function main() {

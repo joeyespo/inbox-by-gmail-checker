@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 // Derivative work by Joe Esposito
 
+// Configuration
 var animationFrames = 36;
 var animationSpeed = 10; // ms
 var canvas = document.getElementById('canvas');
@@ -15,7 +16,8 @@ var rotation = 0;
 var loadingAnimation = new LoadingAnimation();
 
 var options = {
-  defaultUser: 0
+  defaultUser: 0,
+  quietHours: []
 };
 
 // Legacy support for pre-event-pages
@@ -112,10 +114,14 @@ function updateIcon() {
     chrome.browserAction.setBadgeBackgroundColor({color: [190, 190, 190, 230]});
     chrome.browserAction.setBadgeText({text:"?"});
   } else {
+    var time = new Date();
+    var currentHour = time.getHours();
+    var quietTime = options.quietHours && options.quietHours.indexOf(currentHour) !== -1;
+    var unreadCount = localStorage.unreadCount != '0' ? localStorage.unreadCount : '';
     chrome.browserAction.setIcon({path: "inbox_logged_in.png"});
     chrome.browserAction.setBadgeBackgroundColor({color: [0, 56, 206, 255]});
     chrome.browserAction.setBadgeText({
-      text: localStorage.unreadCount != "0" ? localStorage.unreadCount : ""
+      text: (quietTime ? '' : unreadCount)
     });
   }
 }
@@ -330,6 +336,22 @@ function onNavigate(details) {
   }
 }
 
+function loadHoursList(s) {
+  if (!s) {
+    return [];
+  }
+
+  var hourStrings = s.split(',');
+  var hours = [];
+  for (var i = 0; i < hourStrings.length; i++) {
+    var hour = parseInt(hourStrings[i]);
+    if (!isNaN(hour) && hour >= 0 && hour < 24) {
+      hours.push(hour);
+    }
+  }
+  return hours;
+}
+
 function loadOptions(callback) {
   if (!chrome || !chrome.storage || !chrome.storage.sync) {
     callback(false);
@@ -337,9 +359,11 @@ function loadOptions(callback) {
   }
 
   chrome.storage.sync.get({
-    defaultUser: 0
+    defaultUser: 0,
+    quietHours: ''
   }, function(items) {
     options.defaultUser = items.defaultUser;
+    options.quietHours = loadHoursList(items.quietHours);
     callback(true);
   });
 }
