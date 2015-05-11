@@ -423,10 +423,10 @@ function main() {
   }
 
   loadOptions(function () {
-    refresh()
+    refresh();
     chrome.storage.onChanged.addListener(function(changes, namespace) {
       loadOptions(function () {
-        refresh()
+        refresh();
       });
     });
   });
