@@ -284,18 +284,20 @@ function drawIconAtRotation() {
 
 function goToInbox() {
   console.log('Going to inbox...');
-  chrome.tabs.getAllInWindow(undefined, function(tabs) {
-    for (var i = 0, tab; tab = tabs[i]; i++) {
-      if (tab.url && isInboxUrl(tab.url)) {
-        console.log('Found Inbox tab: ' + tab.url + '. ' +
-                    'Focusing and refreshing count...');
-        chrome.tabs.update(tab.id, {selected: true});
-        startRequest({scheduleRequest:false, showLoadingAnimation:false});
-        return;
-      }
+  chrome.tabs.query({
+      url: "*://inbox.google.com/*"
+  }, function (tabs) {
+    var tab = tabs[0];
+    if (tab != undefined) {
+      console.log('Found Inbox tab: ' + tab.url + '. ' +
+        'Focusing and refreshing count...');
+      chrome.tabs.update(tab.id, { selected: true });
+      chrome.windows.update(tab.windowId, { "focused": true });
+      startRequest({ scheduleRequest: false, showLoadingAnimation: false });
+      return;
     }
     console.log('Could not find Inbox tab. Creating one...');
-    chrome.tabs.create({url: getInboxUrl()});
+    chrome.tabs.create({ url: getInboxUrl() });
   });
 }
 
