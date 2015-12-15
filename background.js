@@ -17,7 +17,8 @@ var loadingAnimation = new LoadingAnimation();
 
 var options = {
   defaultUser: 0,
-  quietHours: []
+  quietHours: [],
+  pollInterval: 0
 };
 
 // Legacy support for pre-event-pages
@@ -131,11 +132,16 @@ function updateIcon() {
 
 function scheduleRequest() {
   console.log('scheduleRequest');
-  var randomness = Math.random() * 2;
-  var exponent = Math.pow(2, localStorage.requestFailureCount || 0);
-  var multiplier = Math.max(randomness * exponent, 1);
-  var delay = Math.min(multiplier * pollIntervalMin, pollIntervalMax);
-  delay = Math.round(delay);
+  if(!!options.pollInterval) {
+    var delay = options.pollInterval;
+  } else {
+    var randomness = Math.random() * 2;
+    var exponent = Math.pow(2, localStorage.requestFailureCount || 0);
+    var multiplier = Math.max(randomness * exponent, 1);
+    var delay = Math.min(multiplier * pollIntervalMin, pollIntervalMax);
+    delay = Math.round(delay);
+  }
+
   console.log('Scheduling for: ' + delay);
 
   if (oldChromeVersion) {
@@ -367,10 +373,12 @@ function loadOptions(callback) {
 
   chrome.storage.sync.get({
     defaultUser: 0,
-    quietHours: ''
+    quietHours: '',
+    pollInterval: 0
   }, function(items) {
     options.defaultUser = items.defaultUser;
     options.quietHours = loadHoursList(items.quietHours);
+    options.pollInterval = parseInt(items.pollInterval);
     callback(true);
   });
 }

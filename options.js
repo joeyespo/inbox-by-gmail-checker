@@ -3,10 +3,12 @@ function saveOptions(e) {
 
   var defaultUser = document.getElementById('defaultUser').value;
   var quietHours = document.getElementById('quietHours').value;
+  var pollInterval = document.getElementById('pollInterval').value;
 
   chrome.storage.sync.set({
     defaultUser: defaultUser,
-    quietHours: quietHours
+    quietHours: quietHours,
+    pollInterval: pollInterval
   }, function() {
     // Update status to let user know options were saved.
     var status = document.getElementById('status');
@@ -22,16 +24,19 @@ function saveOptions(e) {
 function restoreOptions() {
   chrome.storage.sync.get({
     defaultUser: '0',
-    quietHours: ''
+    quietHours: '',
+    pollInterval: 0
   }, function(items) {
     document.getElementById('defaultUser').value = items.defaultUser;
     document.getElementById('quietHours').value = items.quietHours;
+      document.getElementById('pollInterval').value = items.pollInterval;
   });
 }
 
 function defaultOptions() {
   document.getElementById('defaultUser').value = 0;
   document.getElementById('quietHours').value = '';
+  document.getElementById('pollInterval').value = 60;
 }
 
 function main() {
