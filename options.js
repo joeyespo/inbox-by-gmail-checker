@@ -36,7 +36,7 @@ function restoreOptions() {
 function defaultOptions() {
   document.getElementById('defaultUser').value = 0;
   document.getElementById('quietHours').value = '';
-  document.getElementById('pollInterval').value = 60;
+  document.getElementById('pollInterval').value = 1;
 }
 
 function main() {
