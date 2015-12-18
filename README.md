@@ -12,7 +12,7 @@ Features
 - Displays the unread count directly on the icon
 - Click the icon to open your inbox in a new tab
 - Set which account to use when signed into multiple Google accounts
-- Set quiet hours to hide the unread count during your peak productivity time
+- Optionally **set quiet hours** to hide the unread count during your peak productivity time
 
 
 Installation
