@@ -379,7 +379,7 @@ function loadOptions(callback) {
   }, function(items) {
     options.defaultUser = items.defaultUser;
     options.quietHours = loadHoursList(items.quietHours);
-    options.pollInterval = parseFloat(items.pollInterval);
+    options.pollInterval = parseFloat(items.pollInterval) || 0;
     callback(true);
   });
 }
