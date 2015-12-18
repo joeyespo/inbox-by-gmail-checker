@@ -1,9 +1,11 @@
 Inbox by Gmail Checker Changelog
 --------------------------------
 
-#### Version 3.2.0 (dev)
+#### Version 3.2.0 (2015-12-18)
 
 - Enhancement: Add polling option ([#5](https://github.com/joeyespo/grip/pull/5) - thanks, [@michliga][]!)
+- Enhancement: Allow checking inbox more frequently than once per minute ([#6](https://github.com/joeyespo/grip/pull/6))
+- Enhancement: Show normalized values when you save the options
 - Add `CHANGES.md` and [`AUTHORS.md`](AUTHORS.md)
 
 
