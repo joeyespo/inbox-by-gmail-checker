@@ -9,8 +9,8 @@ var animationSpeed = 10; // ms
 var canvas = document.getElementById('canvas');
 var loggedInImage = document.getElementById('logged_in');
 var canvasContext = canvas.getContext('2d');
-var pollIntervalMin = 1;  // 1 minute
-var pollIntervalMax = 60;  // 1 hour
+var pollIntervalDefault = 60;  // 1 minute
+var pollIntervalMax = 3600;  // 1 hour
 var requestTimeout = 1000 * 2;  // 2 seconds
 var rotation = 0;
 var loadingAnimation = new LoadingAnimation();
@@ -132,7 +132,7 @@ function updateIcon() {
 
 function scheduleRequest() {
   console.log('scheduleRequest');
-  var pollInterval = options.pollInterval || pollIntervalMin;
+  var pollInterval = options.pollInterval || pollIntervalDefault;
   var multiplier = Math.pow(2, localStorage.requestFailureCount || 0);
   // Use different logic for smaller poll intervals
   if (pollInterval < 1) {
@@ -143,18 +143,18 @@ function scheduleRequest() {
     pollInterval = Math.round(fuzzyMultiplier * pollInterval);
   }
   var delay = Math.min(pollInterval, pollIntervalMax);
-  console.log('Scheduling for: ' + delay);
+  console.log('Scheduling for: ' + delay + ' seconds');
 
   if (oldChromeVersion) {
     if (requestTimerId) {
       window.clearTimeout(requestTimerId);
     }
-    requestTimerId = window.setTimeout(onAlarm, delay*60*1000);
+    requestTimerId = window.setTimeout(onAlarm, delay * 1000);
   } else {
     console.log('Creating alarm');
     // Use a repeating alarm so that it fires again if there was a problem
     // setting the next alarm.
-    chrome.alarms.create('refresh', {periodInMinutes: delay});
+    chrome.alarms.create('refresh', {periodInMinutes: delay / 60.0});
   }
 }
 
@@ -379,7 +379,7 @@ function loadOptions(callback) {
   }, function(items) {
     options.defaultUser = items.defaultUser;
     options.quietHours = loadHoursList(items.quietHours);
-    options.pollInterval = parseFloat(items.pollInterval) || 0;
+    options.pollInterval = parseInt(items.pollInterval) || 0;
     callback(true);
   });
 }

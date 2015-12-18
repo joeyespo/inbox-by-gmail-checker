@@ -2,11 +2,11 @@ function restoreOptions() {
   chrome.storage.sync.get({
     defaultUser: '0',
     quietHours: '',
-    pollInterval: '1'
+    pollInterval: '60'
   }, function(items) {
     document.getElementById('defaultUser').value = items.defaultUser;
     document.getElementById('quietHours').value = items.quietHours;
-      document.getElementById('pollInterval').value = items.pollInterval || 1;
+      document.getElementById('pollInterval').value = items.pollInterval || 60;
   });
 }
 
@@ -16,7 +16,7 @@ function saveOptions(e) {
   // Normalize
   var defaultUser = Math.max(0, parseInt(document.getElementById('defaultUser').value) || 0);
   var quietHours = document.getElementById('quietHours').value;
-  var pollInterval = Math.max(0, parseFloat(document.getElementById('pollInterval').value) || 1);
+  var pollInterval = Math.max(0, parseInt(document.getElementById('pollInterval').value) || 60);
 
   chrome.storage.sync.set({
     defaultUser: defaultUser,
@@ -39,7 +39,7 @@ function saveOptions(e) {
 function defaultOptions() {
   document.getElementById('defaultUser').value = 0;
   document.getElementById('quietHours').value = '';
-  document.getElementById('pollInterval').value = 1;
+  document.getElementById('pollInterval').value = 60;
 }
 
 function main() {
