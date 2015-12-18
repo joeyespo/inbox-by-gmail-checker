@@ -48,6 +48,10 @@ footer a {
 .form-group label {
   margin-right: 4px;
 }
+.form-group .option {
+  width: 164px;
+  display: inline-block;
+}
 .form-group .help-text {
   margin-left: 32px;
   display: inline-block;
