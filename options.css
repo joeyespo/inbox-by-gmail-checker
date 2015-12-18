@@ -60,6 +60,11 @@ footer a {
   width: 48px;
   text-align: left;
 }
+.default-user-control.large {
+  margin-top: 4px;
+  width: 160px;
+  text-align: left;
+}
 .btn {
   padding: 6px 24px;
   margin-right: 12px;
