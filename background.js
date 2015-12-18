@@ -132,16 +132,12 @@ function updateIcon() {
 
 function scheduleRequest() {
   console.log('scheduleRequest');
-  if(!!options.pollInterval) {
-    var delay = options.pollInterval;
-  } else {
-    var randomness = Math.random() * 2;
-    var exponent = Math.pow(2, localStorage.requestFailureCount || 0);
-    var multiplier = Math.max(randomness * exponent, 1);
-    var delay = Math.min(multiplier * pollIntervalMin, pollIntervalMax);
-    delay = Math.round(delay);
-  }
-
+  var pollInterval = options.pollInterval || pollIntervalMin;
+  var randomness = Math.random() * 2;
+  var exponent = Math.pow(2, localStorage.requestFailureCount || 0);
+  var multiplier = Math.max(randomness * exponent, 1);
+  var delay = Math.min(multiplier * pollInterval, pollIntervalMax);
+  delay = Math.round(delay);
   console.log('Scheduling for: ' + delay);
 
   if (oldChromeVersion) {
