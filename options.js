@@ -25,11 +25,11 @@ function restoreOptions() {
   chrome.storage.sync.get({
     defaultUser: '0',
     quietHours: '',
-    pollInterval: 0
+    pollInterval: '1'
   }, function(items) {
     document.getElementById('defaultUser').value = items.defaultUser;
     document.getElementById('quietHours').value = items.quietHours;
-      document.getElementById('pollInterval').value = items.pollInterval;
+      document.getElementById('pollInterval').value = items.pollInterval || 1;
   });
 }
 
