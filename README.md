@@ -27,4 +27,16 @@ Or manually:
 3. Select the downloaded directory
 
 
-[Google Mail Checker]: http://developer.chrome.com/extensions/samples#google-mail-checker
+Contributing
+------------
+
+1. Check the open issues or open a new issue to start a discussion around
+   your feature idea or the bug you found
+2. Fork the repository, make your changes, and add yourself to [Authors.md][]
+3. Send a pull request
+
+If your PR has been waiting a while, feel free to [ping me on Twitter](http://twitter.com/joeyespo).
+
+
+[google mail checker]: http://developer.chrome.com/extensions/samples#google-mail-checker
+[authors.md]: AUTHORS.md
