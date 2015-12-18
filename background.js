@@ -133,11 +133,16 @@ function updateIcon() {
 function scheduleRequest() {
   console.log('scheduleRequest');
   var pollInterval = options.pollInterval || pollIntervalMin;
-  var randomness = Math.random() * 2;
-  var exponent = Math.pow(2, localStorage.requestFailureCount || 0);
-  var multiplier = Math.max(randomness * exponent, 1);
-  var delay = Math.min(multiplier * pollInterval, pollIntervalMax);
-  delay = Math.round(delay);
+  var multiplier = Math.pow(2, localStorage.requestFailureCount || 0);
+  // Use different logic for smaller poll intervals
+  if (pollInterval < 1) {
+    pollInterval *= multiplier;
+  } else {
+    var randomness = Math.random() * 2;
+    var fuzzyMultiplier = Math.max(randomness * multiplier, 1);
+    pollInterval = Math.round(fuzzyMultiplier * pollInterval);
+  }
+  var delay = Math.min(pollInterval, pollIntervalMax);
   console.log('Scheduling for: ' + delay);
 
   if (oldChromeVersion) {
@@ -374,7 +379,7 @@ function loadOptions(callback) {
   }, function(items) {
     options.defaultUser = items.defaultUser;
     options.quietHours = loadHoursList(items.quietHours);
-    options.pollInterval = parseInt(items.pollInterval);
+    options.pollInterval = parseFloat(items.pollInterval);
     callback(true);
   });
 }
