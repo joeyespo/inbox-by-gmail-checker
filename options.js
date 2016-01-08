@@ -16,7 +16,7 @@ function saveOptions(e) {
   // Normalize
   var defaultUser = Math.max(0, parseInt(document.getElementById('defaultUser').value) || 0);
   var quietHours = document.getElementById('quietHours').value;
-  var pollInterval = Math.max(0, parseInt(document.getElementById('pollInterval').value) || 60);
+  var pollInterval = Math.max(0, Math.min(3600, parseInt(document.getElementById('pollInterval').value) || 60));
 
   chrome.storage.sync.set({
     defaultUser: defaultUser,
