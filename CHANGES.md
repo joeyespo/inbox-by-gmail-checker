@@ -1,6 +1,11 @@
 Inbox by Gmail Checker Changelog
 --------------------------------
 
+#### Version 3.4.0 (2016-02-06)
+
+- Enhancement: Stop showing the distracting loading animation ([#11](https://github.com/joeyespo/inbox-by-gmail-checker/issues/11))
+
+
 #### Version 3.3.0 (2016-02-05)
 
 - Enhancement: Add optional quite hours snooze color ([#9](https://github.com/joeyespo/inbox-by-gmail-checker/issues/9))

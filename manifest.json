@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Inbox by Gmail Checker",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "description": "Displays the number of unread messages in your Inbox by Gmail. You can also click the button to open your inbox.",
   "author": "Joe Esposito <joe@joeyespo.com>",
   "icons": {
