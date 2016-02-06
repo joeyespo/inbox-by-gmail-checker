@@ -1,6 +1,13 @@
 Inbox by Gmail Checker Changelog
 --------------------------------
 
+#### Version 3.3.0 (2016-02-05)
+
+- Enhancement: Add optional quite hours snooze color ([#9](https://github.com/joeyespo/inbox-by-gmail-checker/issues/9))
+- Bugfix: Limit the poll input box ([#7](https://github.com/joeyespo/inbox-by-gmail-checker/issues/7))
+- Bugfix: Limit the user ID's min value ([#10](https://github.com/joeyespo/inbox-by-gmail-checker/pull/10) - thanks, [@dpeukert][]!)
+
+
 #### Version 3.2.0 (2015-12-18)
 
 - Enhancement: Add polling option ([#5](https://github.com/joeyespo/grip/pull/5) - thanks, [@michliga][]!)
@@ -33,3 +40,4 @@ Inbox by Gmail Checker Changelog
 
 [@james0x0A]: https://github.com/james0x0A
 [@michliga]: https://github.com/michliga
+[@dpeukert]: https://github.com/dpeukert
