@@ -390,7 +390,7 @@ function loadOptions(callback) {
 }
 
 function refresh() {
-  startRequest({scheduleRequest: true, showLoadingAnimation: true});
+  startRequest({scheduleRequest: true, showLoadingAnimation: false});
 }
 
 function main() {
