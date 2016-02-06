@@ -18,7 +18,8 @@ var loadingAnimation = new LoadingAnimation();
 var options = {
   defaultUser: 0,
   pollInterval: 0,
-  quietHours: []
+  quietHours: [],
+  useSnoozeColor: true
 };
 
 // Legacy support for pre-event-pages
@@ -121,11 +122,13 @@ function updateIcon() {
     chrome.browserAction.setBadgeBackgroundColor({color: [190, 190, 190, 230]});
     chrome.browserAction.setBadgeText({text:"?"});
   } else {
+    var quiet = isQuietTime();
     var unreadCount = localStorage.unreadCount != '0' ? localStorage.unreadCount : '';
-    chrome.browserAction.setIcon({path: "inbox_logged_in.png"});
+    var icon = quiet && options.useSnoozeColor ? 'inbox_quiet.png' : 'inbox_logged_in.png';
+    chrome.browserAction.setIcon({path: icon});
     chrome.browserAction.setBadgeBackgroundColor({color: [0, 56, 206, 255]});
     chrome.browserAction.setBadgeText({
-      text: (isQuietTime() ? '' : unreadCount)
+      text: (quiet ? '' : unreadCount)
     });
   }
 }
@@ -375,11 +378,13 @@ function loadOptions(callback) {
   chrome.storage.sync.get({
     defaultUser: 0,
     pollInterval: 0,
-    quietHours: ''
+    quietHours: '',
+    useSnoozeColor: true
   }, function(items) {
     options.defaultUser = items.defaultUser;
     options.pollInterval = parseInt(items.pollInterval) || 0;
     options.quietHours = loadHoursList(items.quietHours);
+    options.useSnoozeColor = !!items.useSnoozeColor;
     callback(true);
   });
 }
