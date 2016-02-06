@@ -17,8 +17,8 @@ var loadingAnimation = new LoadingAnimation();
 
 var options = {
   defaultUser: 0,
-  quietHours: [],
-  pollInterval: 0
+  pollInterval: 0,
+  quietHours: []
 };
 
 // Legacy support for pre-event-pages
@@ -374,12 +374,12 @@ function loadOptions(callback) {
 
   chrome.storage.sync.get({
     defaultUser: 0,
-    quietHours: '',
-    pollInterval: 0
+    pollInterval: 0,
+    quietHours: ''
   }, function(items) {
     options.defaultUser = items.defaultUser;
-    options.quietHours = loadHoursList(items.quietHours);
     options.pollInterval = parseInt(items.pollInterval) || 0;
+    options.quietHours = loadHoursList(items.quietHours);
     callback(true);
   });
 }

@@ -1,12 +1,12 @@
 function restoreOptions() {
   chrome.storage.sync.get({
     defaultUser: '0',
-    quietHours: '',
-    pollInterval: '60'
+    pollInterval: '60',
+    quietHours: ''
   }, function(items) {
     document.getElementById('defaultUser').value = items.defaultUser;
+    document.getElementById('pollInterval').value = items.pollInterval || 60;
     document.getElementById('quietHours').value = items.quietHours;
-      document.getElementById('pollInterval').value = items.pollInterval || 60;
   });
 }
 
@@ -15,13 +15,13 @@ function saveOptions(e) {
 
   // Normalize
   var defaultUser = Math.max(0, parseInt(document.getElementById('defaultUser').value) || 0);
-  var quietHours = document.getElementById('quietHours').value;
   var pollInterval = Math.max(0, Math.min(3600, parseInt(document.getElementById('pollInterval').value) || 60));
+  var quietHours = document.getElementById('quietHours').value;
 
   chrome.storage.sync.set({
     defaultUser: defaultUser,
-    quietHours: quietHours,
-    pollInterval: pollInterval
+    pollInterval: pollInterval,
+    quietHours: quietHours
   }, function() {
     // Update status to let user know options were saved.
     var status = document.getElementById('status');
@@ -38,8 +38,8 @@ function saveOptions(e) {
 
 function defaultOptions() {
   document.getElementById('defaultUser').value = 0;
-  document.getElementById('quietHours').value = '';
   document.getElementById('pollInterval').value = 60;
+  document.getElementById('quietHours').value = '';
 }
 
 function main() {
