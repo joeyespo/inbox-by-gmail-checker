@@ -1,6 +1,11 @@
 Inbox by Gmail Checker Changelog
 --------------------------------
 
+#### Version 3.6.0 (2016-02-20)
+
+- Enhancement: Add Quiet Hours example
+- Bugfix: Actually fix the blurry icon on retina displays ([#14](https://github.com/joeyespo/inbox-by-gmail-checker/issues/14))
+
 #### Version 3.5.0 (2016-02-19)
 
 - Enhancement: Fix the blurry icon on retina displays ([#14](https://github.com/joeyespo/inbox-by-gmail-checker/issues/14))
