@@ -119,14 +119,23 @@ LoadingAnimation.prototype.stop = function() {
 
 function updateIcon() {
   if (!localStorage.hasOwnProperty('unreadCount')) {
-    chrome.browserAction.setIcon({path: "inbox_not_logged_in.png"});
+    chrome.browserAction.setIcon({
+      path: {
+        '19': 'inbox_not_logged_in.png',
+        '38': 'inbox_not_logged_in_retina.png'
+      }
+    });
     chrome.browserAction.setBadgeBackgroundColor({color: [190, 190, 190, 230]});
     chrome.browserAction.setBadgeText({text:"?"});
   } else {
     var quiet = isQuietTime();
     var unreadCount = localStorage.unreadCount != '0' ? localStorage.unreadCount : '';
-    var icon = quiet && options.useSnoozeColor ? 'inbox_quiet.png' : 'inbox_logged_in.png';
-    chrome.browserAction.setIcon({path: icon});
+    chrome.browserAction.setIcon({
+      path: {
+        '19': quiet && options.useSnoozeColor ? 'inbox_quiet.png' : 'inbox_logged_in.png',
+        '38': quiet && options.useSnoozeColor ? 'inbox_quiet_retina.png' : 'inbox_logged_in_retina.png'
+      }
+    });
     chrome.browserAction.setBadgeBackgroundColor({color: [0, 56, 206, 255]});
     chrome.browserAction.setBadgeText({
       text: (quiet ? '' : unreadCount)
@@ -303,8 +312,9 @@ function drawIconAtRotation() {
       -Math.ceil(canvas.height/2));
   canvasContext.restore();
 
-  chrome.browserAction.setIcon({imageData:canvasContext.getImageData(0, 0,
-      canvas.width,canvas.height)});
+  chrome.browserAction.setIcon({
+    imageData: canvasContext.getImageData(0, 0, canvas.width,canvas.height)
+  });
 }
 
 function goToInbox() {
