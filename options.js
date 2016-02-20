@@ -57,6 +57,11 @@ function main() {
   document.addEventListener('DOMContentLoaded', restoreOptions);
   document.getElementById('defaults').addEventListener('click', defaultOptions);
   document.getElementById('optionsForm').addEventListener('submit', saveOptions);
+  document.getElementById('exampleQuietHours').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('quietHours').value = '9,10,11,12,13,14,15,16,17,18';
+    return false;
+  });
 }
 
 main();

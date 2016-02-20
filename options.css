@@ -43,26 +43,29 @@ footer a {
 .form-group {
   display: block;
   padding: 8px;
-  margin: 8px 0;
+  margin: 0;
 }
 .form-group label {
   margin-right: 4px;
 }
 .form-group .option {
-  width: 164px;
+  width: 200px;
   display: inline-block;
 }
 .form-group .help-text {
   margin-left: 32px;
   display: inline-block;
 }
+.form-group .help-text.multiline {
+  vertical-align: middle;
+}
 .default-user-control {
-  width: 48px;
+  width: 84px;
   text-align: left;
 }
 .default-user-control.large {
   margin-top: 4px;
-  width: 160px;
+  width: 194px;
   text-align: left;
 }
 .btn {
