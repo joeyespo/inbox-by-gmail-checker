@@ -1,6 +1,12 @@
 Inbox by Gmail Checker Changelog
 --------------------------------
 
+#### Version 3.5.0 (2016-02-19)
+
+- Enhancement: Fix the blurry icon on retina displays ([#14](https://github.com/joeyespo/inbox-by-gmail-checker/issues/14))
+- Bugfix: Fix the connectivity problems ([#12](https://github.com/joeyespo/inbox-by-gmail-checker/issues/12))
+
+
 #### Version 3.4.0 (2016-02-06)
 
 - Enhancement: Stop showing the distracting loading animation ([#11](https://github.com/joeyespo/inbox-by-gmail-checker/issues/11))
