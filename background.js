@@ -276,6 +276,7 @@ function gmailNSResolver(prefix) {
 function updateUnreadCount(count) {
   var quietTime = isQuietTime();
   var changed = localStorage.unreadCount != count || String(localStorage.quietTime) != String(quietTime);
+	changed && notify(count);
   localStorage.unreadCount = count;
   localStorage.quietTime = quietTime;
   updateIcon();
@@ -472,5 +473,17 @@ function main() {
     });
   });
 }
-
+function notify(count){
+	var newMessagesCount = count - localStorage.unreadCount,
+			isNumerous 			 = newMessagesCount-1;
+  ; 
+	
+	//Prevent notification if newMessagesCount is 0;
+	newMessagesCount > 0 && chrome.notifications.create("inboxUpdate",{
+						"type":"basic",
+						"iconUrl":"icon_256.png",
+						"title":"Inbox by Gmail Checker",
+						"message":"You have "+(isNumerous?newMessagesCount:"a") +" new message" + (isNumerous?"s.":".") 
+					});
+}
 main();
