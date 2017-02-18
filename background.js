@@ -20,7 +20,8 @@ var options = {
   defaultUser: 0,
   pollInterval: 0,
   quietHours: [],
-  useSnoozeColor: true
+  useSnoozeColor: true,
+	useDesktopNotifications:true
 };
 
 // Legacy support for pre-event-pages
@@ -405,12 +406,14 @@ function loadOptions(callback) {
     defaultUser: 0,
     pollInterval: 0,
     quietHours: '',
-    useSnoozeColor: true
+    useSnoozeColor: true,
+		useDesktopNotifications:true
   }, function(items) {
     options.defaultUser = items.defaultUser;
     options.pollInterval = parseInt(items.pollInterval) || 0;
     options.quietHours = loadHoursList(items.quietHours);
     options.useSnoozeColor = !!items.useSnoozeColor;
+		options.useDesktopNotifications = !!items.useDesktopNotifications
     callback(true);
   });
 }
@@ -478,12 +481,14 @@ function notify(count){
 			isNumerous 			 = newMessagesCount-1;
   ; 
 	
-	//Prevent notification if newMessagesCount is 0;
-	newMessagesCount > 0 && chrome.notifications.create("inboxUpdate",{
-						"type":"basic",
-						"iconUrl":"icon_256.png",
-						"title":"Inbox by Gmail Checker",
-						"message":"You have "+(isNumerous?newMessagesCount:"a") +" new message" + (isNumerous?"s.":".") 
-					});
+	if(options.useDesktopNotifications){
+		//Prevent notification if newMessagesCount is 0;
+		newMessagesCount > 0 && chrome.notifications.create("inboxUpdate",{
+			"type":"basic",
+			"iconUrl":"icon_256.png",
+			"title":"Inbox by Gmail Checker",
+			"message":"You have "+(isNumerous?newMessagesCount:"a") +" new message" + (isNumerous?"s.":".") 
+		});
+	}
 }
 main();

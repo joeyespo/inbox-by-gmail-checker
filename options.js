@@ -3,12 +3,14 @@ function restoreOptions() {
     defaultUser: '0',
     pollInterval: '60',
     quietHours: '',
-    useSnoozeColor: true
+    useSnoozeColor: true,
+		useDesktopNotifications:true
   }, function(items) {
     document.getElementById('defaultUser').value = items.defaultUser;
     document.getElementById('pollInterval').value = items.pollInterval || 60;
     document.getElementById('quietHours').value = items.quietHours;
     document.getElementById('useSnoozeColor').checked = !!items.useSnoozeColor;
+		document.getElementById('useDesktopNotifications').checked = !!items.useDesktopNotifications;
   });
 }
 
@@ -20,12 +22,13 @@ function saveOptions(e) {
   var pollInterval = Math.max(0, Math.min(3600, parseInt(document.getElementById('pollInterval').value) || 60));
   var quietHours = document.getElementById('quietHours').value;
   var useSnoozeColor = document.getElementById('useSnoozeColor').checked;
-
+	var useDesktopNotifications = document.getElementById('useDesktopNotifications').checked;
   chrome.storage.sync.set({
     defaultUser: defaultUser,
     pollInterval: pollInterval,
     quietHours: quietHours,
-    useSnoozeColor: useSnoozeColor
+    useSnoozeColor: useSnoozeColor,
+		useDesktopNotifications:useDesktopNotifications
   }, function() {
     // Update status to let user know options were saved.
     var status = document.getElementById('status');
@@ -45,6 +48,7 @@ function defaultOptions() {
   document.getElementById('pollInterval').value = 60;
   document.getElementById('quietHours').value = '';
   document.getElementById('useSnoozeColor').checked = true;
+	document.getElementById('useDesktopNotifications').checked = true;
 }
 
 function main() {
