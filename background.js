@@ -15,6 +15,7 @@ var requestTimeout = 1000 * 2;  // 2 seconds
 var tryAgainTime = 1000 * 5;  // 5 seconds
 var rotation = 0;
 var loadingAnimation = new LoadingAnimation();
+var workaroundAttempted = false;
 
 var options = {
   defaultUser: 0,
@@ -200,7 +201,7 @@ function startRequest(params) {
   );
 }
 
-function getInboxCount(onSuccess, onError, workaroundAttempted) {
+function getInboxCount(onSuccess, onError) {
   var xhr = new XMLHttpRequest();
   var abortTimerId = window.setTimeout(function() {
     xhr.abort();  // synchronously calls onreadystatechange
@@ -234,8 +235,9 @@ function getInboxCount(onSuccess, onError, workaroundAttempted) {
         chrome.tabs.create({ url: getGmailUrl() });
         // Try again
         if (!workaroundAttempted) {
+          workaroundAttempted = true;
           window.setTimeout(function() {
-            getInboxCount(onSuccess, onError, true);
+            getInboxCount(onSuccess, onError);
           }, tryAgainTime);
         }
         return;
