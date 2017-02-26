@@ -352,6 +352,8 @@ function goToInbox() {
       chrome.tabs.create({ url: getInboxUrl() });
     }
   });
+
+  chrome.notifications.clear('inboxUpdate');
 }
 
 function onInit() {
@@ -448,6 +450,7 @@ function notify(count){
       type: 'basic',
       iconUrl: 'icon_256.png',
       title: 'Inbox by Gmail Checker',
+      contextMessage: 'Click to open Inbox',
       message: 'You have ' + (newMessagesCount === 1 ? 'a': newMessagesCount) +' new message' + (newMessagesCount === 1 ? '' : 's') + '.'
     });
   }
@@ -479,6 +482,7 @@ function main() {
   }
 
   chrome.browserAction.onClicked.addListener(goToInbox);
+  chrome.notifications.onClicked.addListener(goToInbox);
 
   if (chrome.runtime && chrome.runtime.onStartup) {
     chrome.runtime.onStartup.addListener(function() {
