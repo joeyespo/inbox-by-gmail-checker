@@ -77,3 +77,6 @@ footer a {
   font-size: 16px;
   color: green;
 }
+.form-longlabel label{
+	font-size: 0.9em;
+}

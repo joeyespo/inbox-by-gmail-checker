@@ -21,6 +21,7 @@
     "tabs",
     "webNavigation",
     "storage",
+		"notifications",
     "*://*.google.com/"
    ],
   "default_locale": "en"
