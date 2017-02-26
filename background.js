@@ -9,7 +9,7 @@ var animationSpeed = 10; // ms
 var canvas = document.getElementById('canvas');
 var loggedInImage = document.getElementById('logged_in');
 var canvasContext = canvas.getContext('2d');
-var pollIntervalDefault = 60;  // 1 minute
+var pollIntervalDefault = 3;  // 3 seconds
 var pollIntervalMax = 3600;  // 1 hour
 var requestTimeout = 1000 * 2;  // 2 seconds
 var tryAgainTime = 1000 * 5;  // 5 seconds
@@ -448,6 +448,7 @@ function notify(count) {
       type: 'basic',
       iconUrl: 'icon_256.png',
       title: 'Inbox by Gmail Checker',
+      isClickable: true,
       contextMessage: 'Click to open Inbox',
       message: 'You have ' + (newMessagesCount === 1 ? 'a': newMessagesCount) +' new message' + (newMessagesCount === 1 ? '' : 's') + '.'
     });
