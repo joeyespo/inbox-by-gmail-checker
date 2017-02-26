@@ -443,7 +443,7 @@ function refresh() {
 function notify(count){
   var newMessagesCount = count - localStorage.unreadCount;
 
-  if (options.useDesktopNotifications && newMessagesCount > 0) {
+  if (options.useDesktopNotifications && !isQuietTime() && newMessagesCount > 0) {
     chrome.notifications.create('inboxUpdate', {
       type: 'basic',
       iconUrl: 'icon_256.png',
