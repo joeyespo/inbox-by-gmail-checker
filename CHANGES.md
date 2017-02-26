@@ -1,10 +1,18 @@
 Inbox by Gmail Checker Changelog
 --------------------------------
 
+#### Version 4.0.0 (2017-02-26)
+
+- Enhancement: Add new mail notifications ([#18](https://github.com/joeyespo/inbox-by-gmail-checker/pull/18) - thanks, [@davo11122][]!)
+- Enhancement: Open Gmail in the current tab if it's the empty tab ([#20](https://github.com/joeyespo/inbox-by-gmail-checker/pull/20) - thanks, [@orschiro][]!)
+- Link to GitHub from the options page for questions and feedback
+
+
 #### Version 3.6.0 (2016-02-20)
 
 - Enhancement: Add Quiet Hours example
 - Bugfix: Actually fix the blurry icon on retina displays ([#14](https://github.com/joeyespo/inbox-by-gmail-checker/issues/14))
+
 
 #### Version 3.5.0 (2016-02-19)
 
@@ -57,3 +65,5 @@ Inbox by Gmail Checker Changelog
 [@james0x0A]: https://github.com/james0x0A
 [@michliga]: https://github.com/michliga
 [@dpeukert]: https://github.com/dpeukert
+[@davo11122]: https://github.com/davo11122
+[@orschiro]: https://github.com/orschiro
