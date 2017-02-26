@@ -332,7 +332,20 @@ function goToInbox() {
       return;
     }
     console.log('Could not find Inbox tab. Creating one...');
-    chrome.tabs.create({ url: getInboxUrl() });
+  });
+  // check if current tab = new empty tab
+  chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+    var tab = tabs[0]
+    // if new empty tab, open in current tab
+    if (tab.url == "chrome://newtab/") {
+      console.log("Open in current tab")
+      chrome.tabs.update({ url: getInboxUrl() });
+    }
+    else {
+      // else open in new tab
+      console.log("Open in new tab")
+      chrome.tabs.create({ url: getInboxUrl() });
+    }
   });
 }
 
