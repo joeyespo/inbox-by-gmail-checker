@@ -325,9 +325,7 @@ function drawIconAtRotation() {
 
 function goToInbox() {
   console.log('Going to inbox...');
-  chrome.tabs.query({
-      url: '*://inbox.google.com/*'
-  }, function (tabs) {
+  chrome.tabs.query({ url: '*://inbox.google.com/*', currentWindow: true }, function (tabs) {
     var tab = tabs[0];
     if (tab != undefined) {
       console.log('Found Inbox tab: ' + tab.url + '. ' +
