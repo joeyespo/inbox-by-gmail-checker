@@ -440,7 +440,7 @@ function refresh() {
   startRequest({scheduleRequest: true, showLoadingAnimation: false});
 }
 
-function notify(count){
+function notify(count) {
   var newMessagesCount = count - localStorage.unreadCount;
 
   if (options.useDesktopNotifications && !isQuietTime() && newMessagesCount > 0) {
