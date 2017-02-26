@@ -21,7 +21,8 @@ var options = {
   pollInterval: 0,
   quietHours: [],
   useSnoozeColor: true,
-  useDesktopNotifications: true
+  useDesktopNotifications: true,
+  openInEmptyTab: false
 };
 
 // Legacy support for pre-event-pages
@@ -338,15 +339,19 @@ function goToInbox() {
     }
     console.log('Could not find Inbox tab. Creating one...');
   });
-  // Check if current tab is the empty tab
-  chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-    var tab = tabs[0]
-    if (tab.url === 'chrome://newtab/') {
-      chrome.tabs.update({ url: getInboxUrl() });
-    } else {
-      chrome.tabs.create({ url: getInboxUrl() });
-    }
-  });
+  if (options.openInEmptyTab) {
+    // Check if current tab is the empty tab
+    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+      var tab = tabs[0]
+      if (tab.url === 'chrome://newtab/') {
+        chrome.tabs.update({ url: getInboxUrl() });
+      } else {
+        chrome.tabs.create({ url: getInboxUrl() });
+      }
+    });
+  } else {
+    chrome.tabs.create({ url: getInboxUrl() });
+  }
 }
 
 function onInit() {
@@ -418,13 +423,15 @@ function loadOptions(callback) {
     pollInterval: 0,
     quietHours: '',
     useSnoozeColor: true,
-    useDesktopNotifications: true
+    useDesktopNotifications: true,
+    openInEmptyTab: false
   }, function(items) {
     options.defaultUser = items.defaultUser;
     options.pollInterval = parseInt(items.pollInterval) || 0;
     options.quietHours = loadHoursList(items.quietHours);
     options.useSnoozeColor = !!items.useSnoozeColor;
-    options.useDesktopNotifications = !!items.useDesktopNotifications
+    options.useDesktopNotifications = !!items.useDesktopNotifications,
+    options.openInEmptyTab = !!items.openInEmptyTab
     callback(true);
   });
 }

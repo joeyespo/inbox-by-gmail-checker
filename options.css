@@ -51,13 +51,15 @@ footer a {
 .form-group .option {
   width: 200px;
   display: inline-block;
+  vertical-align: top;
 }
 .form-group .help-text {
   margin-left: 32px;
   display: inline-block;
+  max-width: 450px;
 }
 .form-group .help-text.multiline {
-  vertical-align: middle;
+  vertical-align: bottom;
 }
 .default-user-control {
   width: 84px;
