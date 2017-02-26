@@ -9,6 +9,7 @@ along with the following contributors:
 - Daniel Peukert ([@dpeukert](https://github.com/dpeukert))
 - Davit ([@davo11122](https://github.com/davo11122))
 - Robert Orzanna ([@orschiro](https://github.com/orschiro))
+- ShaLi Shaltiel ([@shali3](https://github.com/shali3))
 
 
 [home]: README.md

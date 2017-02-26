@@ -1,10 +1,19 @@
 Inbox by Gmail Checker Changelog
 --------------------------------
 
+#### Version 4.1.0 (2017-02-26)
+
+- Enhancement: Focus or open Inbox when the notification is clicked
+- Enhancement: Set default poll interval to 3 seconds instead of a minute
+- Bugfix: Do not open a new Inbox tab when focusing an existing one ([#21](https://github.com/joeyespo/inbox-by-gmail-checker/pull/21) - thanks, [@shali3][]!)
+- Bugfix: Focus an existing Inbox tab only within the current window
+- Bugfix: Do not show notifications during quiet hours
+
+
 #### Version 4.0.0 (2017-02-26)
 
 - Enhancement: Add new mail notifications ([#18](https://github.com/joeyespo/inbox-by-gmail-checker/pull/18) - thanks, [@davo11122][]!)
-- Enhancement: Open Gmail in the current tab if it's the empty tab ([#20](https://github.com/joeyespo/inbox-by-gmail-checker/pull/20) - thanks, [@orschiro][]!)
+- Enhancement: Open Inbox in the current tab if it's the empty tab ([#20](https://github.com/joeyespo/inbox-by-gmail-checker/pull/20) - thanks, [@orschiro][]!)
 - Link to GitHub from the options page for questions and feedback
 
 
@@ -67,3 +76,4 @@ Inbox by Gmail Checker Changelog
 [@dpeukert]: https://github.com/dpeukert
 [@davo11122]: https://github.com/davo11122
 [@orschiro]: https://github.com/orschiro
+[@shali3]: https://github.com/shali3
