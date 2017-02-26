@@ -11,7 +11,7 @@
       <div class="form-group">
         <div class="option">
           <label>Default User:</label>
-          <code>/u/</code><input class="default-user-control" type="number" min="0" id="defaultUser">
+          <span class="inline-input"><code>/u/</code><input class="default-user-control" type="number" min="0" id="defaultUser"></span>
         </div>
         <div class="help-text">
           Check a different account when you're signed into multiple.
@@ -20,7 +20,7 @@
       <div class="form-group">
         <div class="option">
           <label>Poll Interval:</label>
-          <input class="default-user-control" type="number" min="0" max="3600" id="pollInterval"> sec
+          <span class="inline-input"><input class="default-user-control" type="number" min="0" max="3600" id="pollInterval"> sec</span>
         </div>
         <div class="help-text">
           Frequency, in seconds, that your inbox is checked.
@@ -44,9 +44,9 @@
           When checked, <img src="inbox_quiet.png" align="center" /> is used during quiet hours instead of <img src="inbox_logged_in.png" align="center" />
         </div>
       </div>
-			<div class="form-group form-longlabel">
+      <div class="form-group">
         <div class="option">
-          <label><input type="checkbox" id="useDesktopNotifications"/> Show Desktop Notifications</label>
+          <label><input type="checkbox" id="useDesktopNotifications" /> Show desktop notifications</label>
         </div>
         <div class="help-text">
           When checked, notifications will pop up when new email arrives.

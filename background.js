@@ -21,7 +21,7 @@ var options = {
   pollInterval: 0,
   quietHours: [],
   useSnoozeColor: true,
-	useDesktopNotifications:true
+  useDesktopNotifications: true
 };
 
 // Legacy support for pre-event-pages
@@ -277,12 +277,15 @@ function gmailNSResolver(prefix) {
 function updateUnreadCount(count) {
   var quietTime = isQuietTime();
   var changed = localStorage.unreadCount != count || String(localStorage.quietTime) != String(quietTime);
-	changed && notify(count);
+  if (changed) {
+    notify(count);
+  }
   localStorage.unreadCount = count;
   localStorage.quietTime = quietTime;
   updateIcon();
-  if (changed)
+  if (changed) {
     animateFlip();
+  }
 }
 
 
@@ -322,30 +325,25 @@ function drawIconAtRotation() {
 function goToInbox() {
   console.log('Going to inbox...');
   chrome.tabs.query({
-      url: "*://inbox.google.com/*"
+      url: '*://inbox.google.com/*'
   }, function (tabs) {
     var tab = tabs[0];
     if (tab != undefined) {
       console.log('Found Inbox tab: ' + tab.url + '. ' +
         'Focusing and refreshing count...');
       chrome.tabs.update(tab.id, { selected: true });
-      chrome.windows.update(tab.windowId, { "focused": true });
+      chrome.windows.update(tab.windowId, { focused: true });
       startRequest({ scheduleRequest: false, showLoadingAnimation: false });
       return;
     }
     console.log('Could not find Inbox tab. Creating one...');
   });
-  // check if current tab = new empty tab
+  // Check if current tab is the empty tab
   chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
     var tab = tabs[0]
-    // if new empty tab, open in current tab
-    if (tab.url == "chrome://newtab/") {
-      console.log("Open in current tab")
+    if (tab.url === 'chrome://newtab/') {
       chrome.tabs.update({ url: getInboxUrl() });
-    }
-    else {
-      // else open in new tab
-      console.log("Open in new tab")
+    } else {
       chrome.tabs.create({ url: getInboxUrl() });
     }
   });
@@ -420,19 +418,32 @@ function loadOptions(callback) {
     pollInterval: 0,
     quietHours: '',
     useSnoozeColor: true,
-		useDesktopNotifications:true
+    useDesktopNotifications: true
   }, function(items) {
     options.defaultUser = items.defaultUser;
     options.pollInterval = parseInt(items.pollInterval) || 0;
     options.quietHours = loadHoursList(items.quietHours);
     options.useSnoozeColor = !!items.useSnoozeColor;
-		options.useDesktopNotifications = !!items.useDesktopNotifications
+    options.useDesktopNotifications = !!items.useDesktopNotifications
     callback(true);
   });
 }
 
 function refresh() {
   startRequest({scheduleRequest: true, showLoadingAnimation: false});
+}
+
+function notify(count){
+  var newMessagesCount = count - localStorage.unreadCount;
+
+  if (options.useDesktopNotifications && newMessagesCount > 0) {
+    chrome.notifications.create('inboxUpdate', {
+      type: 'basic',
+      iconUrl: 'icon_256.png',
+      title: 'Inbox by Gmail Checker',
+      message: 'You have ' + (newMessagesCount === 1 ? 'a': newMessagesCount) +' new message' + (newMessagesCount === 1 ? '' : 's') + '.'
+    });
+  }
 }
 
 function main() {
@@ -489,19 +500,5 @@ function main() {
     });
   });
 }
-function notify(count){
-	var newMessagesCount = count - localStorage.unreadCount,
-			isNumerous 			 = newMessagesCount-1;
-  ; 
-	
-	if(options.useDesktopNotifications){
-		//Prevent notification if newMessagesCount is 0;
-		newMessagesCount > 0 && chrome.notifications.create("inboxUpdate",{
-			"type":"basic",
-			"iconUrl":"icon_256.png",
-			"title":"Inbox by Gmail Checker",
-			"message":"You have "+(isNumerous?newMessagesCount:"a") +" new message" + (isNumerous?"s.":".") 
-		});
-	}
-}
+
 main();

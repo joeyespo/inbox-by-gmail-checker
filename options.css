@@ -45,8 +45,8 @@ footer a {
   padding: 8px;
   margin: 0;
 }
-.form-group label {
-  margin-right: 4px;
+.form-group .inline-input {
+  margin-left: 4px;
 }
 .form-group .option {
   width: 200px;
@@ -76,7 +76,4 @@ footer a {
   display: inline-block;
   font-size: 16px;
   color: green;
-}
-.form-longlabel label{
-	font-size: 0.9em;
 }
