@@ -22,7 +22,8 @@
     "webNavigation",
     "storage",
     "notifications",
-    "*://*.google.com/"
+    "*://inbox.google.com/",
+    "*://mail.google.com/"
    ],
   "default_locale": "en"
 }
