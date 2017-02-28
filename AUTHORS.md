@@ -10,6 +10,8 @@ along with the following contributors:
 - Davit ([@davo11122](https://github.com/davo11122))
 - Robert Orzanna ([@orschiro](https://github.com/orschiro))
 - ShaLi Shaltiel ([@shali3](https://github.com/shali3))
+- Nikodem Ośmiałowski ([@Najki](https://github.com/Najki))
+- Carlos Cabral ([@CarlosHBC](https://github.com/CarlosHBC))
 
 
 [home]: README.md

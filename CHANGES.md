@@ -1,6 +1,12 @@
 Inbox by Gmail Checker Changelog
 --------------------------------
 
+#### Version 4.2.0 (2017-02-27)
+
+- Enhancement: Require only Gmail and Inbox permissions instead of all Google apps ([#24](https://github.com/joeyespo/inbox-by-gmail-checker/pull/24) - thanks, [@Najki][]!)
+- Enhancement: Optimize all images losslessly ([#22](https://github.com/joeyespo/inbox-by-gmail-checker/pull/22) - thanks, [@CarlosHBC][]!)
+
+
 #### Version 4.1.0 (2017-02-26)
 
 - Enhancement: Focus or open Inbox when the notification is clicked
@@ -77,3 +83,5 @@ Inbox by Gmail Checker Changelog
 [@davo11122]: https://github.com/davo11122
 [@orschiro]: https://github.com/orschiro
 [@shali3]: https://github.com/shali3
+[@Najki]: https://github.com/Najki
+[@CarlosHBC]: https://github.com/CarlosHBC
