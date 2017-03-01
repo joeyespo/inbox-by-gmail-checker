@@ -398,6 +398,12 @@ function onNavigate(details) {
   }
 }
 
+function onShareToInbox(info, tab) {
+  chrome.tabs.create({
+    url: getInboxUrl() + '?&subject=' + encodeURIComponent(tab.title) + '&body=' + encodeURIComponent(tab.url)
+  });
+}
+
 function loadHoursList(s) {
   if (!s) {
     return [];
@@ -486,6 +492,15 @@ function main() {
 
   if (chrome.notifications && chrome.notifications.onClicked) {
     chrome.notifications.onClicked.addListener(goToInbox);
+  }
+
+  if (chrome.contextMenus && chrome.contextMenus.create && chrome.contextMenus.onClicked) {
+    chrome.contextMenus.create({ id: 'shareToInbox', title: 'Share page in Inbox', contexts: ['browser_action'] });
+    chrome.contextMenus.onClicked.addListener(function (info, tab) {
+      if (info.menuItemId === 'shareToInbox') {
+        onShareToInbox(info, tab);
+      }
+    });
   }
 
   if (chrome.runtime && chrome.runtime.onStartup) {

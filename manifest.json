@@ -20,6 +20,7 @@
     "alarms",
     "tabs",
     "webNavigation",
+    "contextMenus",
     "storage",
     "notifications",
     "*://inbox.google.com/",
