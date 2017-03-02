@@ -9,66 +9,32 @@
     <form id="optionsForm" action="#">
       <h1>Inbox by Gmail Options</h1>
       <div class="form-group">
-        <div class="option">
-          <label>Default User:</label>
-          <span class="inline-input"><code>/u/</code><input class="default-user-control" type="number" min="0" id="defaultUser"></span>
-        </div>
-        <div class="help-text">
-          Check a different account when you're signed into multiple.
-        </div>
+        <div class="option"><label>Default user:</label> <span class="inline-input"><code>/u/</code><input class="default-user-control" type="number" min="0" id="defaultUser"></span></div>
+        <div class="help-text">Check a different account when you're signed into multiple.</div>
       </div>
       <div class="form-group">
-        <div class="option">
-          <label>Poll Interval:</label>
-          <span class="inline-input"><input class="default-user-control" type="number" min="0" max="3600" id="pollInterval"> sec</span>
-        </div>
-        <div class="help-text">
-          Frequency, in seconds, that your inbox is checked.
-        </div>
+        <div class="option"><label>Poll interval:</label> <span class="inline-input"><input class="default-user-control" type="number" min="0" max="3600" id="pollInterval" /> sec</span></div>
+        <div class="help-text">Frequency, in seconds, that your inbox is checked.</div>
       </div>
       <div class="form-group">
-        <div class="option">
-          <label>Quiet Hours:</label>
-          <input class="default-user-control large" type="text" id="quietHours">
-        </div>
-        <div class="help-text multiline">
-          Comma-separated list of hours to disable notifications and hide the unread count each day.
-          Example: <a id="exampleQuietHours" href="#">Common working hours</a>
-        </div>
+        <div class="option"><label>Quiet hours:</label> <input class="default-user-control large" type="text" id="quietHours" /></div>
+        <div class="help-text multiline">Comma-separated list of hours to disable notifications and hide the unread count each day. Example: <a id="exampleQuietHours" href="#">Common working hours</a></div>
       </div>
       <div class="form-group">
-        <div class="option">
-          <label>Distraction-free minutes:</label>
-          <input class="default-user-control large" type="number" min="1" max="1440" id="distractionFreeMinutes" />
-        </div>
-        <div class="help-text multiline">
-          Number of minutes to be quiet when "Go distraction-free" is selected.
-          (Right-click the extension's icon to find this)
-        </div>
+        <div class="option"><label>Distraction-free minutes:</label> <input class="default-user-control large" type="number" min="1" max="1440" id="distractionFreeMinutes" /></div>
+        <div class="help-text multiline">Number of minutes to be quiet when "Go distraction-free" is selected. (Right-click the extension's icon to find this)</div>
       </div>
       <div class="form-group">
-        <div class="option">
-          <label><input type="checkbox" id="useSnoozeColor" /> Use distraction-free colors</label>
-        </div>
-        <div class="help-text">
-          When checked, use <img src="inbox_quiet.png" align="center" /> for quiet and distraction-free time instead of <img src="inbox_logged_in.png" align="center" />
-        </div>
+        <div class="option"><label><input type="checkbox" id="useSnoozeColor" /> Use distraction-free colors</label></div>
+        <div class="help-text">When checked, use <img src="inbox_quiet.png" align="center" /> for quiet and distraction-free time instead of <img src="inbox_logged_in.png" align="center" /></div>
       </div>
       <div class="form-group">
-        <div class="option">
-          <label><input type="checkbox" id="useDesktopNotifications" /> Show desktop notifications</label>
-        </div>
-        <div class="help-text">
-          When checked, notifications will pop up when new email arrives.
-        </div>
+        <div class="option"><label><input type="checkbox" id="useDesktopNotifications" /> Show desktop notifications</label></div>
+        <div class="help-text">When checked, notifications will pop up when new email arrives.</div>
       </div>
       <div class="form-group">
-        <div class="option">
-          <label><input type="checkbox" id="openInEmptyTab" /> Open in current tab if empty</label>
-        </div>
-        <div class="help-text">
-          When checked, navigates to your inbox using the current tab instead of a new one if the current tab is the "empty" tab.
-        </div>
+        <div class="option"><label><input type="checkbox" id="openInEmptyTab" /> Open in current tab if empty</label></div>
+        <div class="help-text">When checked, navigates to your inbox using the current tab instead of a new one if the current tab is the "empty" tab.</div>
       </div>
       <div class="form-group">
         <button class="btn" type="button" id="defaults">Defaults</button>
