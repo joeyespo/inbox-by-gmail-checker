@@ -350,24 +350,36 @@ function goToNewInbox() {
   }
 }
 
+function goToExistingInbox() {
+  console.log('Going to inbox...');
+  chrome.tabs.query({ url: '*://inbox.google.com/*', currentWindow: true }, function (tabs) {
+    var tab = tabs[0];
+    if (tab) {
+      console.log('Found Inbox tab: ' + tab.url + '. Focusing and refreshing count...');
+      chrome.tabs.update(tab.id, { selected: true, highlighted: true });
+      startRequest({ scheduleRequest: false, showLoadingAnimation: false });
+    } else {
+      console.log('Could not find Inbox tab. Creating one...');
+      goToNewInbox();
+    }
+  });
+}
+
 function goToInbox() {
-  // Go to existing Inbox tab or create a new one
-  if (options.focusExistingInboxTab) {
-    console.log('Going to inbox...');
-    chrome.tabs.query({ url: '*://inbox.google.com/*', currentWindow: true }, function (tabs) {
-      var tab = tabs[0];
-      if (tab) {
-        console.log('Found Inbox tab: ' + tab.url + '. Focusing and refreshing count...');
-        chrome.tabs.update(tab.id, { selected: true });
-        startRequest({ scheduleRequest: false, showLoadingAnimation: false });
-      } else {
-        console.log('Could not find Inbox tab. Creating one...');
-        goToNewInbox();
-      }
-    });
-  } else {
-    goToNewInbox();
-  }
+  chrome.tabs.query({ url: '*://inbox.google.com/*', active: true, currentWindow: true }, function (tabs) {
+    var tab = tabs[0];
+    // Do nothing if current tab is Inbox
+    var inboxUrl = getInboxUrl();
+    if (tab && tab.url && tab.url.substr(0, inboxUrl.length) === inboxUrl) {
+      return;
+    }
+    // Go to existing Inbox tab or create a new one
+    if (options.focusExistingInboxTab) {
+      goToExistingInbox();
+    } else {
+      goToNewInbox();
+    }
+  });
 
   // Clear notifications
   if (chrome.notifications && chrome.notifications.clear) {
