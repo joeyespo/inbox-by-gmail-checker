@@ -532,13 +532,12 @@ function main() {
   }
 
   // Update mail count when Inbox is visited without clicking the app icon
-  var filters = {
-    // TODO(aa): Cannot use urlPrefix because all the url fields lack the protocol
-    // part. See crbug.com/140238.
-    url: [{urlContains: getInboxBaseUrl().replace(/^https?\:\/\//, '')}]
-  };
-  if (chrome.webNavigation && chrome.webNavigation.onDOMContentLoaded &&
-      chrome.webNavigation.onReferenceFragmentUpdated) {
+  if (chrome.webNavigation && chrome.webNavigation.onDOMContentLoaded && chrome.webNavigation.onReferenceFragmentUpdated) {
+    // NOTE: Keep this "webNavigation" code in here in case the permission is ever added back in
+    //       e.g. "webNavigation" no longer shows a "Read your browsing history" permission warning, "tabs" is required
+    //            again by this project, or certain "webNavigation" actions become workable without the permission
+    // TODO(aa): Cannot use urlPrefix because all the url fields lack the protocol part (see crbug.com/140238)
+    var filters = { url: [{ urlContains: getInboxBaseUrl().replace(/^https?\:\/\//, '') }] };
     chrome.webNavigation.onDOMContentLoaded.addListener(onNavigate, filters);
     chrome.webNavigation.onReferenceFragmentUpdated.addListener(onNavigate, filters);
   } else {

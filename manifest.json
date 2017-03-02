@@ -20,7 +20,6 @@
   "permissions": [
     "alarms",
     "activeTab",
-    "webNavigation",
     "contextMenus",
     "storage",
     "notifications",
