@@ -448,7 +448,7 @@ function loadHoursList(s) {
   var hourStrings = s.split(',');
   var hours = [];
   for (var i = 0; i < hourStrings.length; i++) {
-    var hour = parseInt(hourStrings[i]);
+    var hour = parseInt(hourStrings[i], 10);
     if (!isNaN(hour) && hour >= 0 && hour < 24) {
       hours.push(hour);
     }
@@ -472,7 +472,7 @@ function loadOptions(callback) {
     openInEmptyTab: false
   }, function(items) {
     options.defaultUser = items.defaultUser;
-    options.pollInterval = parseInt(items.pollInterval) || 0;
+    options.pollInterval = parseInt(items.pollInterval, 10) || 0;
     options.quietHours = loadHoursList(items.quietHours);
     options.distractionFreeMinutes = parseInt(items.distractionFreeMinutes, 10) || 30;
     options.useSnoozeColor = !!items.useSnoozeColor;
