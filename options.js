@@ -3,6 +3,7 @@ function restoreOptions() {
     defaultUser: '0',
     pollInterval: '3',
     quietHours: '',
+    distractionFreeMinutes: '30',
     useSnoozeColor: true,
     useDesktopNotifications: true,
     openInEmptyTab: false
@@ -10,6 +11,7 @@ function restoreOptions() {
     document.getElementById('defaultUser').value = items.defaultUser;
     document.getElementById('pollInterval').value = items.pollInterval || 3;
     document.getElementById('quietHours').value = items.quietHours;
+    document.getElementById('distractionFreeMinutes').value = items.distractionFreeMinutes || 30;
     document.getElementById('useSnoozeColor').checked = !!items.useSnoozeColor;
     document.getElementById('useDesktopNotifications').checked = !!items.useDesktopNotifications;
     document.getElementById('openInEmptyTab').checked = !!items.openInEmptyTab;
@@ -23,6 +25,7 @@ function saveOptions(e) {
   var defaultUser = Math.max(0, parseInt(document.getElementById('defaultUser').value) || 0);
   var pollInterval = Math.max(0, Math.min(3600, parseInt(document.getElementById('pollInterval').value) || 3));
   var quietHours = document.getElementById('quietHours').value;
+  var distractionFreeMinutes = Math.max(1, Math.min(1440, parseInt(document.getElementById('distractionFreeMinutes').value) || 30));
   var useSnoozeColor = document.getElementById('useSnoozeColor').checked;
   var useDesktopNotifications = document.getElementById('useDesktopNotifications').checked;
   var openInEmptyTab = document.getElementById('openInEmptyTab').checked;
@@ -30,6 +33,7 @@ function saveOptions(e) {
     defaultUser: defaultUser,
     pollInterval: pollInterval,
     quietHours: quietHours,
+    distractionFreeMinutes: distractionFreeMinutes,
     useSnoozeColor: useSnoozeColor,
     useDesktopNotifications: useDesktopNotifications,
     openInEmptyTab: openInEmptyTab
@@ -51,6 +55,7 @@ function defaultOptions() {
   document.getElementById('defaultUser').value = 0;
   document.getElementById('pollInterval').value = 3;
   document.getElementById('quietHours').value = '';
+  document.getElementById('distractionFreeMinutes').value = 30;
   document.getElementById('useSnoozeColor').checked = true;
   document.getElementById('useDesktopNotifications').checked = true;
   document.getElementById('openInEmptyTab').checked = false;

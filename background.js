@@ -16,11 +16,14 @@ var tryAgainTime = 1000 * 5;  // 5 seconds
 var rotation = 0;
 var loadingAnimation = new LoadingAnimation();
 var workaroundAttempted = false;
+var distractionFreeMode = false;
+var distractionFreeModeTimerId = null;
 
 var options = {
   defaultUser: 0,
   pollInterval: 0,
   quietHours: [],
+  distractionFreeMinutes: 30,
   useSnoozeColor: true,
   useDesktopNotifications: true,
   openInEmptyTab: false
@@ -31,9 +34,11 @@ var oldChromeVersion = !chrome.runtime;
 var requestTimerId;
 
 function isQuietTime() {
+  if (distractionFreeMode) {
+    return true;
+  }
   var time = new Date();
-  var currentHour = time.getHours();
-  return options.quietHours && options.quietHours.indexOf(currentHour) !== -1;
+  return options.quietHours && options.quietHours.indexOf(time.getHours()) !== -1;
 }
 
 function getUser() {
@@ -404,6 +409,37 @@ function onShareToInbox(info, tab) {
   });
 }
 
+function resetDistractionFreeMode() {
+  distractionFreeMode = false;
+  chrome.contextMenus.update('distractionFreeInbox', { title: 'Go distraction-free for ' + options.distractionFreeMinutes + ' min' });
+  if (distractionFreeModeTimerId) {
+    window.clearTimeout(distractionFreeModeTimerId);
+    distractionFreeModeTimerId = null;
+  }
+}
+
+function onDistractionFreeMode(info, tab) {
+  if (!distractionFreeMode) {
+    // TODO: Disable during quiet mode?
+    console.log('Ending distraction-free mode in ' + options.distractionFreeMinutes + ' minutes');
+    resetDistractionFreeMode();
+    distractionFreeMode = true;
+    chrome.contextMenus.update('distractionFreeInbox', { title: 'Leave distraction-free mode' });
+    distractionFreeModeTimerId = window.setTimeout(resetDistractionFreeMode, options.distractionFreeMinutes * 60 * 1000);
+  } else {
+    console.log('Distraction-free mode ended');
+    resetDistractionFreeMode()
+  }
+  refresh();
+}
+
+function onOptionsLoaded() {
+  if (!distractionFreeMode) {
+    chrome.contextMenus.update('distractionFreeInbox', { title: 'Go distraction-free for ' + options.distractionFreeMinutes + ' min' });
+  }
+  refresh();
+}
+
 function loadHoursList(s) {
   if (!s) {
     return [];
@@ -430,6 +466,7 @@ function loadOptions(callback) {
     defaultUser: 0,
     pollInterval: 0,
     quietHours: '',
+    distractionFreeMinutes: 30,
     useSnoozeColor: true,
     useDesktopNotifications: true,
     openInEmptyTab: false
@@ -437,6 +474,7 @@ function loadOptions(callback) {
     options.defaultUser = items.defaultUser;
     options.pollInterval = parseInt(items.pollInterval) || 0;
     options.quietHours = loadHoursList(items.quietHours);
+    options.distractionFreeMinutes = parseInt(items.distractionFreeMinutes, 10) || 30;
     options.useSnoozeColor = !!items.useSnoozeColor;
     options.useDesktopNotifications = !!items.useDesktopNotifications;
     options.openInEmptyTab = !!items.openInEmptyTab;
@@ -477,7 +515,6 @@ function main() {
     // part. See crbug.com/140238.
     url: [{urlContains: getInboxBaseUrl().replace(/^https?\:\/\//, '')}]
   };
-
   if (chrome.webNavigation && chrome.webNavigation.onDOMContentLoaded &&
       chrome.webNavigation.onReferenceFragmentUpdated) {
     chrome.webNavigation.onDOMContentLoaded.addListener(onNavigate, filters);
@@ -495,10 +532,13 @@ function main() {
   }
 
   if (chrome.contextMenus && chrome.contextMenus.create && chrome.contextMenus.onClicked) {
+    chrome.contextMenus.create({ id: 'distractionFreeInbox', title: 'Go distraction-free', contexts: ['browser_action'] });
     chrome.contextMenus.create({ id: 'shareToInbox', title: 'Share page in Inbox', contexts: ['browser_action'] });
     chrome.contextMenus.onClicked.addListener(function (info, tab) {
       if (info.menuItemId === 'shareToInbox') {
         onShareToInbox(info, tab);
+      } else if (info.menuItemId === 'distractionFreeInbox') {
+        onDistractionFreeMode(info, tab);
       }
     });
   }
@@ -522,10 +562,10 @@ function main() {
   }
 
   loadOptions(function () {
-    refresh();
+    onOptionsLoaded();
     chrome.storage.onChanged.addListener(function(changes, namespace) {
       loadOptions(function () {
-        refresh();
+        onOptionsLoaded();
       });
     });
   });
