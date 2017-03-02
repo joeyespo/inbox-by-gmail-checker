@@ -26,6 +26,7 @@ var options = {
   distractionFreeMinutes: 30,
   useSnoozeColor: true,
   useDesktopNotifications: true,
+  focusExistingInboxTab: false,
   openInEmptyTab: false
 };
 
@@ -330,31 +331,42 @@ function drawIconAtRotation() {
   });
 }
 
+function goToNewInbox() {
+  // Navigate the empty tab if preferred, or create a new Inbox tab
+  if (options.openInEmptyTab) {
+    console.log('Navigating empty tab to Inbox...');
+    // Check if current tab is the empty tab
+    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+      var tab = tabs[0]
+      if (tab && tab.url === 'chrome://newtab/') {
+        chrome.tabs.update({ url: getInboxUrl() });
+      } else {
+        chrome.tabs.create({ url: getInboxUrl() });
+      }
+    });
+  } else {
+    console.log('Creating new Inbox tab...');
+    chrome.tabs.create({ url: getInboxUrl() });
+  }
+}
+
 function goToInbox() {
-  console.log('Going to inbox...');
-  chrome.tabs.query({ url: '*://inbox.google.com/*', currentWindow: true }, function (tabs) {
-    var tab = tabs[0];
-    if (tab) {
-      console.log('Found Inbox tab: ' + tab.url + '. Focusing and refreshing count...');
-      chrome.tabs.update(tab.id, { selected: true });
-      startRequest({ scheduleRequest: false, showLoadingAnimation: false });
-      return;
-    }
-    console.log('Could not find Inbox tab. Creating one...');
-    if (options.openInEmptyTab) {
-      // Check if current tab is the empty tab
-      chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-        var tab = tabs[0]
-        if (tab && tab.url === 'chrome://newtab/') {
-          chrome.tabs.update({ url: getInboxUrl() });
-        } else {
-          chrome.tabs.create({ url: getInboxUrl() });
-        }
-      });
-    } else {
-      chrome.tabs.create({ url: getInboxUrl() });
-    }
-  });
+  if (options.focusExistingInboxTab) {
+    console.log('Going to inbox...');
+    chrome.tabs.query({ url: '*://inbox.google.com/*', currentWindow: true }, function (tabs) {
+      var tab = tabs[0];
+      if (tab) {
+        console.log('Found Inbox tab: ' + tab.url + '. Focusing and refreshing count...');
+        chrome.tabs.update(tab.id, { selected: true });
+        startRequest({ scheduleRequest: false, showLoadingAnimation: false });
+      } else {
+        console.log('Could not find Inbox tab. Creating one...');
+        goToNewInbox();
+      }
+    });
+  } else {
+    goToNewInbox();
+  }
 
   if (chrome.notifications && chrome.notifications.clear) {
     chrome.notifications.clear('inboxUpdate');
@@ -469,6 +481,7 @@ function loadOptions(callback) {
     distractionFreeMinutes: 30,
     useSnoozeColor: true,
     useDesktopNotifications: true,
+    focusExistingInboxTab: false,
     openInEmptyTab: false
   }, function(items) {
     options.defaultUser = items.defaultUser;
@@ -476,6 +489,7 @@ function loadOptions(callback) {
     options.quietHours = loadHoursList(items.quietHours);
     options.distractionFreeMinutes = parseInt(items.distractionFreeMinutes, 10) || 30;
     options.useSnoozeColor = !!items.useSnoozeColor;
+    options.focusExistingInboxTab = !!items.focusExistingInboxTab;
     options.useDesktopNotifications = !!items.useDesktopNotifications;
     options.openInEmptyTab = !!items.openInEmptyTab;
     callback(true);

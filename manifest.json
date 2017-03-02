@@ -16,9 +16,10 @@
     "page": "background.html"
   },
   "options_page": "options.html",
+  "optional_permissions": ["tabs"],
   "permissions": [
     "alarms",
-    "tabs",
+    "activeTab",
     "webNavigation",
     "contextMenus",
     "storage",

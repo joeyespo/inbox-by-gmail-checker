@@ -6,6 +6,7 @@ function restoreOptions() {
     distractionFreeMinutes: '30',
     useSnoozeColor: true,
     useDesktopNotifications: true,
+    focusExistingInboxTab: false,
     openInEmptyTab: false
   }, function(items) {
     document.getElementById('defaultUser').value = items.defaultUser;
@@ -15,6 +16,12 @@ function restoreOptions() {
     document.getElementById('useSnoozeColor').checked = !!items.useSnoozeColor;
     document.getElementById('useDesktopNotifications').checked = !!items.useDesktopNotifications;
     document.getElementById('openInEmptyTab').checked = !!items.openInEmptyTab;
+    chrome.permissions.contains({ permissions: ['tabs'] }, function (result) {
+      document.getElementById('focusExistingInboxTabError').textContent = items.focusExistingInboxTab && !result ?
+        'Error: "tabs" permission not granted. Re-check this option to try again.' :
+        '';
+      document.getElementById('focusExistingInboxTab').checked = !!items.focusExistingInboxTab;
+    });
   });
 }
 
@@ -28,6 +35,7 @@ function saveOptions(e) {
   var distractionFreeMinutes = Math.max(1, Math.min(1440, parseInt(document.getElementById('distractionFreeMinutes').value) || 30));
   var useSnoozeColor = document.getElementById('useSnoozeColor').checked;
   var useDesktopNotifications = document.getElementById('useDesktopNotifications').checked;
+  var focusExistingInboxTab = document.getElementById('focusExistingInboxTab').checked;
   var openInEmptyTab = document.getElementById('openInEmptyTab').checked;
   chrome.storage.sync.set({
     defaultUser: defaultUser,
@@ -36,6 +44,7 @@ function saveOptions(e) {
     distractionFreeMinutes: distractionFreeMinutes,
     useSnoozeColor: useSnoozeColor,
     useDesktopNotifications: useDesktopNotifications,
+    focusExistingInboxTab: focusExistingInboxTab,
     openInEmptyTab: openInEmptyTab
   }, function() {
     // Update status to let user know options were saved.
@@ -48,6 +57,12 @@ function saveOptions(e) {
 
   // Show normalized values
   restoreOptions();
+
+  // Remove unused permissions
+  if (!focusExistingInboxTab) {
+    chrome.permissions.remove({ permissions: ['tabs'] });
+  }
+
   return false;
 }
 
@@ -58,6 +73,7 @@ function defaultOptions() {
   document.getElementById('distractionFreeMinutes').value = 30;
   document.getElementById('useSnoozeColor').checked = true;
   document.getElementById('useDesktopNotifications').checked = true;
+  document.getElementById('focusExistingInboxTab').checked = false;
   document.getElementById('openInEmptyTab').checked = false;
 }
 
@@ -78,6 +94,21 @@ function main() {
   document.getElementById('exampleQuietHours').addEventListener('click', function(e) {
     e.preventDefault();
     document.getElementById('quietHours').value = '9,10,11,12,13,14,15,16,17,18';
+    return false;
+  });
+  document.getElementById('focusExistingInboxTab').addEventListener('click', function (e) {
+    if (document.getElementById('focusExistingInboxTab').checked) {
+      chrome.permissions.contains({ permissions: ['tabs'] }, function (result) {
+        if (!result) {
+          alert('This option requires the following permission in order to locate Inbox tabs:\n\n \u2022 "tabs"\n\nIf prompted, select "Allow" to enable this feature.');
+          chrome.permissions.request({ permissions: ['tabs'] }, function (granted) {
+            if (!granted) {
+              document.getElementById('focusExistingInboxTab').checked = false;
+            }
+          });
+        }
+      });
+    }
     return false;
   });
 }

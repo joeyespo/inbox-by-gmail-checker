@@ -79,3 +79,7 @@ footer a {
   font-size: 16px;
   color: green;
 }
+.status.error {
+  font-size: 14px;
+  color: red;
+}
