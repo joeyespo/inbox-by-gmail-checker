@@ -62,12 +62,16 @@ function defaultOptions() {
 }
 
 function main() {
+  document.getElementById('version').innerHTML = chrome.runtime.getManifest().version;
+
+  // Ensure permissions
   if (!chrome || !chrome.storage || !chrome.storage.sync) {
     var status = document.getElementById('status');
     status.style.cssText = 'color:red;';
     status.textContent = 'Error: Could not load settings. Please upgrade Chrome.';
     return;
   }
+
   document.addEventListener('DOMContentLoaded', restoreOptions);
   document.getElementById('defaults').addEventListener('click', defaultOptions);
   document.getElementById('optionsForm').addEventListener('submit', saveOptions);
