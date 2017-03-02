@@ -329,11 +329,9 @@ function goToInbox() {
   console.log('Going to inbox...');
   chrome.tabs.query({ url: '*://inbox.google.com/*', currentWindow: true }, function (tabs) {
     var tab = tabs[0];
-    if (tab != undefined) {
-      console.log('Found Inbox tab: ' + tab.url + '. ' +
-        'Focusing and refreshing count...');
+    if (tab) {
+      console.log('Found Inbox tab: ' + tab.url + '. Focusing and refreshing count...');
       chrome.tabs.update(tab.id, { selected: true });
-      chrome.windows.update(tab.windowId, { focused: true });
       startRequest({ scheduleRequest: false, showLoadingAnimation: false });
       return;
     }
@@ -342,7 +340,7 @@ function goToInbox() {
       // Check if current tab is the empty tab
       chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         var tab = tabs[0]
-        if (tab.url === 'chrome://newtab/') {
+        if (tab && tab.url === 'chrome://newtab/') {
           chrome.tabs.update({ url: getInboxUrl() });
         } else {
           chrome.tabs.create({ url: getInboxUrl() });
@@ -353,7 +351,9 @@ function goToInbox() {
     }
   });
 
-  chrome.notifications.clear('inboxUpdate');
+  if (chrome.notifications && chrome.notifications.clear) {
+    chrome.notifications.clear('inboxUpdate');
+  }
 }
 
 function onInit() {
@@ -432,8 +432,8 @@ function loadOptions(callback) {
     options.pollInterval = parseInt(items.pollInterval) || 0;
     options.quietHours = loadHoursList(items.quietHours);
     options.useSnoozeColor = !!items.useSnoozeColor;
-    options.useDesktopNotifications = !!items.useDesktopNotifications,
-    options.openInEmptyTab = !!items.openInEmptyTab
+    options.useDesktopNotifications = !!items.useDesktopNotifications;
+    options.openInEmptyTab = !!items.openInEmptyTab;
     callback(true);
   });
 }
@@ -483,7 +483,10 @@ function main() {
   }
 
   chrome.browserAction.onClicked.addListener(goToInbox);
-  chrome.notifications.onClicked.addListener(goToInbox);
+
+  if (chrome.notifications && chrome.notifications.onClicked) {
+    chrome.notifications.onClicked.addListener(goToInbox);
+  }
 
   if (chrome.runtime && chrome.runtime.onStartup) {
     chrome.runtime.onStartup.addListener(function() {
