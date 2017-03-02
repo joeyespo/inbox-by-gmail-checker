@@ -66,7 +66,7 @@ function getInboxUrl() {
 // Identifier used to debug the possibility of multiple instances of the
 // extension making requests on behalf of a single user.
 function getInstanceId() {
-  if (!localStorage.hasOwnProperty("instanceId"))
+  if (!localStorage.hasOwnProperty('instanceId'))
     localStorage.instanceId = 'gmc' + parseInt(Date.now() * Math.random(), 10);
   return localStorage.instanceId;
 }
@@ -74,7 +74,7 @@ function getInstanceId() {
 function getFeedUrl() {
   // "zx" is a Gmail query parameter that is expected to contain a random
   // string and may be ignored/stripped.
-  return getGmailUrl() + "feed/atom?zx=" + encodeURIComponent(getInstanceId());
+  return getGmailUrl() + 'feed/atom?zx=' + encodeURIComponent(getInstanceId());
 }
 
 function isInboxUrl(url) {
@@ -93,32 +93,32 @@ function LoadingAnimation() {
   this.maxDot_ = 4;  // Max number of dots in animation
 }
 
-LoadingAnimation.prototype.paintFrame = function() {
-  var text = "";
+LoadingAnimation.prototype.paintFrame = function () {
+  var text = '';
   for (var i = 0; i < this.maxDot_; i++) {
-    text += (i == this.current_) ? "." : " ";
+    text += (i == this.current_) ? '.' : ' ';
   }
   if (this.current_ >= this.maxDot_)
-    text += "";
+    text += '';
 
-  chrome.browserAction.setBadgeBackgroundColor({color: [0, 56, 206, 255]});
-  chrome.browserAction.setBadgeText({text: text});
+  chrome.browserAction.setBadgeBackgroundColor({ color: [0, 56, 206, 255] });
+  chrome.browserAction.setBadgeText({ text: text });
   this.current_++;
   if (this.current_ == this.maxCount_)
     this.current_ = 0;
 }
 
-LoadingAnimation.prototype.start = function() {
+LoadingAnimation.prototype.start = function () {
   if (this.timerId_)
     return;
 
   var self = this;
-  this.timerId_ = window.setInterval(function() {
+  this.timerId_ = window.setInterval(function () {
     self.paintFrame();
   }, 100);
 }
 
-LoadingAnimation.prototype.stop = function() {
+LoadingAnimation.prototype.stop = function () {
   if (!this.timerId_)
     return;
 
@@ -134,8 +134,8 @@ function updateIcon() {
         '38': 'inbox_not_logged_in_retina.png'
       }
     });
-    chrome.browserAction.setBadgeBackgroundColor({color: [190, 190, 190, 230]});
-    chrome.browserAction.setBadgeText({text:"?"});
+    chrome.browserAction.setBadgeBackgroundColor({ color: [190, 190, 190, 230] });
+    chrome.browserAction.setBadgeText({ text: '?' });
   } else {
     var quiet = isQuietTime();
     var unreadCount = localStorage.unreadCount != '0' ? localStorage.unreadCount : '';
@@ -145,7 +145,7 @@ function updateIcon() {
         '38': quiet && options.useSnoozeColor ? 'inbox_quiet_retina.png' : 'inbox_logged_in_retina.png'
       }
     });
-    chrome.browserAction.setBadgeBackgroundColor({color: [0, 56, 206, 255]});
+    chrome.browserAction.setBadgeBackgroundColor({ color: [0, 56, 206, 255] });
     chrome.browserAction.setBadgeText({
       text: (quiet ? '' : unreadCount)
     });
@@ -195,11 +195,11 @@ function startRequest(params) {
     loadingAnimation.start();
 
   getInboxCount(
-    function(count) {
+    function (count) {
       stopLoadingAnimation();
       updateUnreadCount(count);
     },
-    function() {
+    function () {
       stopLoadingAnimation();
       delete localStorage.unreadCount;
       updateIcon();
@@ -209,7 +209,7 @@ function startRequest(params) {
 
 function getInboxCount(onSuccess, onError) {
   var xhr = new XMLHttpRequest();
-  var abortTimerId = window.setTimeout(function() {
+  var abortTimerId = window.setTimeout(function () {
     xhr.abort();  // synchronously calls onreadystatechange
   }, requestTimeout);
 
@@ -230,7 +230,7 @@ function getInboxCount(onSuccess, onError) {
   }
 
   try {
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = function () {
       if (xhr.readyState != 4)
         return;
 
@@ -242,7 +242,7 @@ function getInboxCount(onSuccess, onError) {
         // Try again
         if (!workaroundAttempted) {
           workaroundAttempted = true;
-          window.setTimeout(function() {
+          window.setTimeout(function () {
             getInboxCount(onSuccess, onError);
           }, tryAgainTime);
         }
@@ -251,28 +251,28 @@ function getInboxCount(onSuccess, onError) {
 
       if (xhr.responseXML) {
         var xmlDoc = xhr.responseXML;
-        var fullCountSet = xmlDoc.evaluate("/gmail:feed/gmail:fullcount",
+        var fullCountSet = xmlDoc.evaluate('/gmail:feed/gmail:fullcount',
             xmlDoc, gmailNSResolver, XPathResult.ANY_TYPE, null);
         var fullCountNode = fullCountSet.iterateNext();
         if (fullCountNode) {
           handleSuccess(fullCountNode.textContent);
           return;
         } else {
-          console.error(chrome.i18n.getMessage("gmailcheck_node_error"));
+          console.error(chrome.i18n.getMessage('gmailcheck_node_error'));
         }
       }
 
       handleError();
     };
 
-    xhr.onerror = function(error) {
+    xhr.onerror = function (error) {
       handleError();
     };
 
-    xhr.open("GET", getFeedUrl(), true);
+    xhr.open('GET', getFeedUrl(), true);
     xhr.send(null);
   } catch(e) {
-    console.error(chrome.i18n.getMessage("gmailcheck_exception", e));
+    console.error(chrome.i18n.getMessage('gmailcheck_exception', e));
     handleError();
   }
 }
@@ -351,6 +351,7 @@ function goToNewInbox() {
 }
 
 function goToInbox() {
+  // Go to existing Inbox tab or create a new one
   if (options.focusExistingInboxTab) {
     console.log('Going to inbox...');
     chrome.tabs.query({ url: '*://inbox.google.com/*', currentWindow: true }, function (tabs) {
@@ -368,6 +369,7 @@ function goToInbox() {
     goToNewInbox();
   }
 
+  // Clear notifications
   if (chrome.notifications && chrome.notifications.clear) {
     chrome.notifications.clear('inboxUpdate');
   }
@@ -376,11 +378,11 @@ function goToInbox() {
 function onInit() {
   console.log('onInit');
   localStorage.requestFailureCount = 0;  // used for exponential backoff
-  startRequest({scheduleRequest:true, showLoadingAnimation:true});
+  startRequest({ scheduleRequest: true, showLoadingAnimation: true });
   if (!oldChromeVersion) {
     // TODO(mpcomplete): We should be able to remove this now, but leaving it
     // for a little while just to be sure the refresh alarm is working nicely.
-    chrome.alarms.create('watchdog', {periodInMinutes:5});
+    chrome.alarms.create('watchdog', { periodInMinutes: 5 });
   }
 }
 
@@ -391,27 +393,26 @@ function onAlarm(alarm) {
   if (alarm && alarm.name == 'watchdog') {
     onWatchdog();
   } else {
-    startRequest({scheduleRequest:true, showLoadingAnimation:false});
+    startRequest({ scheduleRequest: true, showLoadingAnimation: false });
   }
 }
 
 function onWatchdog() {
-  chrome.alarms.get('refresh', function(alarm) {
+  chrome.alarms.get('refresh', function (alarm) {
     if (alarm) {
       console.log('Refresh alarm exists. Yay.');
     } else {
       console.log('Refresh alarm doesn\'t exist!? ' +
                   'Refreshing now and rescheduling.');
-      startRequest({scheduleRequest:true, showLoadingAnimation:false});
+      startRequest({ scheduleRequest: true, showLoadingAnimation: false });
     }
   });
 }
 
 function onNavigate(details) {
   if (details.url && isInboxUrl(details.url)) {
-    console.log('Recognized Inbox navigation to: ' + details.url + '.' +
-                'Refreshing count...');
-    startRequest({scheduleRequest:false, showLoadingAnimation:false});
+    console.log('Recognized Inbox navigation to: ' + details.url + '. Refreshing count...');
+    startRequest({ scheduleRequest: false, showLoadingAnimation: false });
   }
 }
 
@@ -422,6 +423,7 @@ function onShareToInbox(info, tab) {
 }
 
 function resetDistractionFreeMode() {
+  // Turn off distraction-free mode, reflect this in the context menu, and clear any outstanding timers
   distractionFreeMode = false;
   chrome.contextMenus.update('distractionFreeInbox', { title: 'Go distraction-free for ' + options.distractionFreeMinutes + ' min' });
   if (distractionFreeModeTimerId) {
@@ -431,8 +433,8 @@ function resetDistractionFreeMode() {
 }
 
 function onDistractionFreeMode(info, tab) {
+  // Update distraction-free mode and reflect this in the context menu
   if (!distractionFreeMode) {
-    // TODO: Disable during quiet mode?
     console.log('Ending distraction-free mode in ' + options.distractionFreeMinutes + ' minutes');
     resetDistractionFreeMode();
     distractionFreeMode = true;
@@ -442,13 +444,16 @@ function onDistractionFreeMode(info, tab) {
     console.log('Distraction-free mode ended');
     resetDistractionFreeMode()
   }
+
   refresh();
 }
 
 function onOptionsLoaded() {
+  // Update distraction-free mode minutes
   if (!distractionFreeMode) {
     chrome.contextMenus.update('distractionFreeInbox', { title: 'Go distraction-free for ' + options.distractionFreeMinutes + ' min' });
   }
+
   refresh();
 }
 
@@ -469,11 +474,13 @@ function loadHoursList(s) {
 }
 
 function loadOptions(callback) {
+  // Do nothing if storage is not permitted
   if (!chrome || !chrome.storage || !chrome.storage.sync) {
     callback(false);
     return;
   }
 
+  // Load options from storage (with fallbacks)
   chrome.storage.sync.get({
     defaultUser: 0,
     pollInterval: 0,
@@ -483,7 +490,7 @@ function loadOptions(callback) {
     useDesktopNotifications: true,
     focusExistingInboxTab: false,
     openInEmptyTab: false
-  }, function(items) {
+  }, function (items) {
     options.defaultUser = items.defaultUser;
     options.pollInterval = parseInt(items.pollInterval, 10) || 0;
     options.quietHours = loadHoursList(items.quietHours);
@@ -497,7 +504,7 @@ function loadOptions(callback) {
 }
 
 function refresh() {
-  startRequest({scheduleRequest: true, showLoadingAnimation: false});
+  startRequest({ scheduleRequest: true, showLoadingAnimation: false });
 }
 
 function notify(count) {
@@ -524,6 +531,7 @@ function main() {
     chrome.alarms.onAlarm.addListener(onAlarm);
   }
 
+  // Update mail count when Inbox is visited without clicking the app icon
   var filters = {
     // TODO(aa): Cannot use urlPrefix because all the url fields lack the protocol
     // part. See crbug.com/140238.
@@ -534,17 +542,20 @@ function main() {
     chrome.webNavigation.onDOMContentLoaded.addListener(onNavigate, filters);
     chrome.webNavigation.onReferenceFragmentUpdated.addListener(onNavigate, filters);
   } else {
-    chrome.tabs.onUpdated.addListener(function(_, details) {
+    chrome.tabs.onUpdated.addListener(function (_, details) {
       onNavigate(details);
     });
   }
 
+  // Handle main click action
   chrome.browserAction.onClicked.addListener(goToInbox);
 
+  // Handle notification clicks, if notifications are supported
   if (chrome.notifications && chrome.notifications.onClicked) {
     chrome.notifications.onClicked.addListener(goToInbox);
   }
 
+  // Create context menu items
   if (chrome.contextMenus && chrome.contextMenus.create && chrome.contextMenus.onClicked) {
     chrome.contextMenus.create({ id: 'distractionFreeInbox', title: 'Go distraction-free', contexts: ['browser_action'] });
     chrome.contextMenus.create({ id: 'shareToInbox', title: 'Share page in Inbox', contexts: ['browser_action'] });
@@ -558,9 +569,9 @@ function main() {
   }
 
   if (chrome.runtime && chrome.runtime.onStartup) {
-    chrome.runtime.onStartup.addListener(function() {
+    chrome.runtime.onStartup.addListener(function () {
       console.log('Starting browser... updating icon.');
-      startRequest({scheduleRequest:false, showLoadingAnimation:false});
+      startRequest({ scheduleRequest: false, showLoadingAnimation: false });
       updateIcon();
     });
   } else {
@@ -568,16 +579,17 @@ function main() {
     // state, and also doesn't expose onStartup. So the icon always starts out in
     // wrong state. We don't actually use onStartup except as a clue that we're
     // in a version of Chrome that has this problem.
-    chrome.windows.onCreated.addListener(function() {
+    chrome.windows.onCreated.addListener(function () {
       console.log('Window created... updating icon.');
-      startRequest({scheduleRequest:false, showLoadingAnimation:false});
+      startRequest({ scheduleRequest: false, showLoadingAnimation: false });
       updateIcon();
     });
   }
 
+  // Load options and re-load them when they're changed
   loadOptions(function () {
     onOptionsLoaded();
-    chrome.storage.onChanged.addListener(function(changes, namespace) {
+    chrome.storage.onChanged.addListener(function (changes, namespace) {
       loadOptions(function () {
         onOptionsLoaded();
       });

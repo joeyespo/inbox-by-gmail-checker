@@ -8,7 +8,7 @@ function restoreOptions() {
     useDesktopNotifications: true,
     focusExistingInboxTab: false,
     openInEmptyTab: false
-  }, function(items) {
+  }, function (items) {
     document.getElementById('defaultUser').value = items.defaultUser;
     document.getElementById('pollInterval').value = items.pollInterval || 3;
     document.getElementById('quietHours').value = items.quietHours;
@@ -46,11 +46,11 @@ function saveOptions(e) {
     useDesktopNotifications: useDesktopNotifications,
     focusExistingInboxTab: focusExistingInboxTab,
     openInEmptyTab: openInEmptyTab
-  }, function() {
+  }, function () {
     // Update status to let user know options were saved.
     var status = document.getElementById('status');
     status.textContent = 'Options saved.';
-    setTimeout(function() {
+    setTimeout(function () {
       status.textContent = '';
     }, 3000);
   });
@@ -91,7 +91,7 @@ function main() {
   document.addEventListener('DOMContentLoaded', restoreOptions);
   document.getElementById('defaults').addEventListener('click', defaultOptions);
   document.getElementById('optionsForm').addEventListener('submit', saveOptions);
-  document.getElementById('exampleQuietHours').addEventListener('click', function(e) {
+  document.getElementById('exampleQuietHours').addEventListener('click', function (e) {
     e.preventDefault();
     document.getElementById('quietHours').value = '9,10,11,12,13,14,15,16,17,18';
     return false;
