@@ -210,32 +210,45 @@ function startRequest(params) {
 function getInboxCount(onSuccess, onError) {
   var xhr = new XMLHttpRequest();
   var abortTimerId = window.setTimeout(function () {
-    xhr.abort();  // synchronously calls onreadystatechange
+    if (xhr) {
+      xhr.abort();  // synchronously calls onreadystatechange
+    }
+    cleanup();
   }, requestTimeout);
 
-  function handleSuccess(count) {
-    localStorage.requestFailureCount = 0;
+  function cleanup() {
     window.clearTimeout(abortTimerId);
-    if (onSuccess)
+    xhr.onreadystatechange = null;
+    xhr = null;
+  }
+
+  function handleSuccess(count) {
+    cleanup();
+    localStorage.requestFailureCount = 0;
+    if (onSuccess) {
       onSuccess(count);
+    }
   }
 
   var invokedErrorCallback = false;
   function handleError() {
+    console.error('handleError() called');
+    cleanup();
     ++localStorage.requestFailureCount;
-    window.clearTimeout(abortTimerId);
-    if (onError && !invokedErrorCallback)
+    if (onError && !invokedErrorCallback) {
       onError();
+    }
     invokedErrorCallback = true;
   }
 
   try {
     xhr.onreadystatechange = function () {
-      if (xhr.readyState != 4)
+      if (this.readyState != 4) {
         return;
+      }
 
       // Check for edge case where mail.google.com has not yet been visited and try again
-      if (xhr.status === 401) {
+      if (this.status === 401) {
         // Visit regular gmail to authorize feed access
         console.log('Got error 401 while getting inbox count... opening', getGmailUrl());
         chrome.tabs.create({ url: getGmailUrl() });
@@ -249,10 +262,9 @@ function getInboxCount(onSuccess, onError) {
         return;
       }
 
-      if (xhr.responseXML) {
-        var xmlDoc = xhr.responseXML;
-        var fullCountSet = xmlDoc.evaluate('/gmail:feed/gmail:fullcount',
-            xmlDoc, gmailNSResolver, XPathResult.ANY_TYPE, null);
+      if (this.responseXML) {
+        var xmlDoc = this.responseXML;
+        var fullCountSet = xmlDoc.evaluate('/gmail:feed/gmail:fullcount', xmlDoc, gmailNSResolver, XPathResult.ANY_TYPE, null);
         var fullCountNode = fullCountSet.iterateNext();
         if (fullCountNode) {
           handleSuccess(fullCountNode.textContent);
