@@ -6,6 +6,7 @@ function restoreOptions() {
     distractionFreeMinutes: '30',
     useSnoozeColor: true,
     useDesktopNotifications: true,
+    showPageMenu: true,
     focusExistingInboxTab: false,
     openInEmptyTab: false
   }, function (items) {
@@ -14,6 +15,7 @@ function restoreOptions() {
     document.getElementById('quietHours').value = items.quietHours;
     document.getElementById('distractionFreeMinutes').value = items.distractionFreeMinutes || 30;
     document.getElementById('useSnoozeColor').checked = !!items.useSnoozeColor;
+    document.getElementById('showPageMenu').checked = !!items.showPageMenu;
     document.getElementById('useDesktopNotifications').checked = !!items.useDesktopNotifications;
     document.getElementById('openInEmptyTab').checked = !!items.openInEmptyTab;
     chrome.permissions.contains({ permissions: ['tabs'] }, function (result) {
@@ -35,6 +37,7 @@ function saveOptions(e) {
   var distractionFreeMinutes = Math.max(1, Math.min(1440, parseInt(document.getElementById('distractionFreeMinutes').value) || 30));
   var useSnoozeColor = document.getElementById('useSnoozeColor').checked;
   var useDesktopNotifications = document.getElementById('useDesktopNotifications').checked;
+  var showPageMenu = document.getElementById('showPageMenu').checked;
   var focusExistingInboxTab = document.getElementById('focusExistingInboxTab').checked;
   var openInEmptyTab = document.getElementById('openInEmptyTab').checked;
   chrome.storage.sync.set({
@@ -44,6 +47,7 @@ function saveOptions(e) {
     distractionFreeMinutes: distractionFreeMinutes,
     useSnoozeColor: useSnoozeColor,
     useDesktopNotifications: useDesktopNotifications,
+    showPageMenu: showPageMenu,
     focusExistingInboxTab: focusExistingInboxTab,
     openInEmptyTab: openInEmptyTab
   }, function () {
@@ -73,6 +77,7 @@ function defaultOptions() {
   document.getElementById('distractionFreeMinutes').value = 30;
   document.getElementById('useSnoozeColor').checked = true;
   document.getElementById('useDesktopNotifications').checked = true;
+  document.getElementById('showPageMenu').checked = true;
   document.getElementById('focusExistingInboxTab').checked = false;
   document.getElementById('openInEmptyTab').checked = false;
 }

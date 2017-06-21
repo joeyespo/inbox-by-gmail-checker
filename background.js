@@ -26,6 +26,7 @@ var options = {
   distractionFreeMinutes: 30,
   useSnoozeColor: true,
   useDesktopNotifications: true,
+  showPageMenu: true,
   focusExistingInboxTab: false,
   openInEmptyTab: false
 };
@@ -475,6 +476,13 @@ function onOptionsLoaded() {
     chrome.contextMenus.update('distractionFreeInbox', { title: 'Go distraction-free for ' + options.distractionFreeMinutes + ' min' });
   }
 
+  // Update context menu
+  var contexts = ['browser_action']
+  if (options.showPageMenu) {
+    contexts.push('page');
+  }
+  chrome.contextMenus.update('shareToInbox', { contexts: contexts });
+
   refresh();
 }
 
@@ -509,6 +517,7 @@ function loadOptions(callback) {
     distractionFreeMinutes: 30,
     useSnoozeColor: true,
     useDesktopNotifications: true,
+    showPageMenu: true,
     focusExistingInboxTab: false,
     openInEmptyTab: false
   }, function (items) {
@@ -518,6 +527,7 @@ function loadOptions(callback) {
     options.distractionFreeMinutes = parseInt(items.distractionFreeMinutes, 10) || 30;
     options.useSnoozeColor = !!items.useSnoozeColor;
     options.focusExistingInboxTab = !!items.focusExistingInboxTab;
+    options.showPageMenu = !!items.showPageMenu;
     options.useDesktopNotifications = !!items.useDesktopNotifications;
     options.openInEmptyTab = !!items.openInEmptyTab;
     callback(true);
@@ -578,7 +588,7 @@ function main() {
   // Create context menu items
   if (chrome.contextMenus && chrome.contextMenus.create && chrome.contextMenus.onClicked) {
     chrome.contextMenus.create({ id: 'distractionFreeInbox', title: 'Go distraction-free', contexts: ['browser_action'] });
-    chrome.contextMenus.create({ id: 'shareToInbox', title: 'Share page via email', contexts: ['browser_action'] });
+    chrome.contextMenus.create({ id: 'shareToInbox', title: 'Share page via email', contexts: ['browser_action', 'page'] });
     chrome.contextMenus.onClicked.addListener(function (info, tab) {
       if (info.menuItemId === 'shareToInbox') {
         onShareToInbox(info, tab);
