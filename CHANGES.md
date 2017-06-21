@@ -1,6 +1,20 @@
 Inbox by Gmail Checker Changelog
 --------------------------------
 
+#### Version 4.3.0 (2017-06-21)
+
+- Enhancement: Add "Share page via email" extension and optional page context menus ([#25](https://github.com/joeyespo/inbox-by-gmail-checker/issues/25))
+- Enhancement: Add [Pomodoro](https://en.wikipedia.org/wiki/Pomodoro_Technique)-inspired "Distraction-free mode"
+- Enhancement: Show current version on options page
+- Enhancement: Make "tabs" permission optional with a new "focus existing Inbox tab" option
+- Enhancement: Remove unnecessary permissions ([#25](https://github.com/joeyespo/inbox-by-gmail-checker/issues/25))
+- Bugfix: Do nothing if current tab is already Inbox
+- Bugfix: Open login page only once on disconnect
+- Readme: Add a description of the extension
+- Clarify option descriptions
+- Cleanup
+
+
 #### Version 4.2.0 (2017-02-27)
 
 - Enhancement: Require only Gmail and Inbox permissions instead of all Google apps ([#24](https://github.com/joeyespo/inbox-by-gmail-checker/pull/24) - thanks, [@Najki][]!)
