@@ -578,7 +578,7 @@ function main() {
   // Create context menu items
   if (chrome.contextMenus && chrome.contextMenus.create && chrome.contextMenus.onClicked) {
     chrome.contextMenus.create({ id: 'distractionFreeInbox', title: 'Go distraction-free', contexts: ['browser_action'] });
-    chrome.contextMenus.create({ id: 'shareToInbox', title: 'Share page in Inbox', contexts: ['browser_action'] });
+    chrome.contextMenus.create({ id: 'shareToInbox', title: 'Share page via email', contexts: ['browser_action'] });
     chrome.contextMenus.onClicked.addListener(function (info, tab) {
       if (info.menuItemId === 'shareToInbox') {
         onShareToInbox(info, tab);
