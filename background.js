@@ -15,7 +15,7 @@ var requestTimeout = 1000 * 2;  // 2 seconds
 var tryAgainTime = 1000 * 5;  // 5 seconds
 var rotation = 0;
 var loadingAnimation = new LoadingAnimation();
-var workaroundAttempted = false;
+var openedLoginPage = false;
 var distractionFreeMode = false;
 var distractionFreeModeTimerId = null;
 
@@ -198,6 +198,7 @@ function startRequest(params) {
     function (count) {
       stopLoadingAnimation();
       updateUnreadCount(count);
+      openedLoginPage = false;
     },
     function () {
       stopLoadingAnimation();
@@ -249,20 +250,16 @@ function getInboxCount(onSuccess, onError) {
 
       // Check for edge case where mail.google.com has not yet been visited and try again
       if (this.status === 401) {
-        // Visit regular gmail to authorize feed access
-        console.log('Got error 401 while getting inbox count... opening', getGmailUrl());
-        chrome.tabs.create({ url: getGmailUrl() });
-        // Try again
-        if (!workaroundAttempted) {
-          workaroundAttempted = true;
-          window.setTimeout(function () {
-            getInboxCount(onSuccess, onError);
-          }, tryAgainTime);
+        console.log('Got error 401 while getting inbox count');
+        if (openedLoginPage) {
+          console.log('Login page already opened - waiting for user to authenticate');
+        } else {
+          // Visit regular gmail to authorize feed access
+          openedLoginPage = true;
+          console.log('Opening', getGmailUrl());
+          chrome.tabs.create({ url: getGmailUrl() });
         }
-        return;
-      }
-
-      if (this.responseXML) {
+      } else if (this.responseXML) {
         var xmlDoc = this.responseXML;
         var fullCountSet = xmlDoc.evaluate('/gmail:feed/gmail:fullcount', xmlDoc, gmailNSResolver, XPathResult.ANY_TYPE, null);
         var fullCountNode = fullCountSet.iterateNext();
