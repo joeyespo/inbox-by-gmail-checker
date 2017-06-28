@@ -1,12 +1,8 @@
 ﻿Inbox by Gmail Checker
 ======================
 
-<a href="https://chrome.google.com/webstore/detail/inbox-by-gmail-checker/mpjmeeikbbgccbjkbfabocnjcaejdpmj" target="_blank">
-  ![Current version on the Chrome Web Store](https://img.shields.io/badge/chrome%20web%20store-4.3.0-blue.svg "Current version on the Chrome Web Store")
-</a>
-<a href="https://chrome.google.com/webstore/detail/inbox-by-gmail-checker/mpjmeeikbbgccbjkbfabocnjcaejdpmj" target="_blank">
-  ![Rating on the Chrome Web Store](https://img.shields.io/badge/rating-%E2%98%85%E2%98%85%E2%98%85%E2%98%85%E2%98%86%204.3%20(‎144%20votes)-brightgreen.svg "Rating on the Chrome Web Store")
-</a>
+<a href="https://chrome.google.com/webstore/detail/inbox-by-gmail-checker/mpjmeeikbbgccbjkbfabocnjcaejdpmj" target="_blank">![Current version on the Chrome Web Store](https://img.shields.io/badge/chrome%20web%20store-4.3.0-blue.svg "Current version on the Chrome Web Store")</a>
+<a href="https://chrome.google.com/webstore/detail/inbox-by-gmail-checker/mpjmeeikbbgccbjkbfabocnjcaejdpmj" target="_blank">![Rating on the Chrome Web Store](https://img.shields.io/badge/rating-%E2%98%85%E2%98%85%E2%98%85%E2%98%85%E2%98%86%204.3%20(167%20votes)-brightgreen.svg "Rating on the Chrome Web Store")</a>
 
 Displays the number of unread messages in Inbox by Gmail. You can also click the button to open your inbox and receive notifications on new email. You can set "quiet hours" to eliminate distraction during your most productive hours or temporarily go "distraction free" for a pomodoro-like experience.
 
