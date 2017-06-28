@@ -23,9 +23,7 @@ Features
 Installation
 ------------
 
-<a href="https://chrome.google.com/webstore/detail/inbox-by-gmail-checker/mpjmeeikbbgccbjkbfabocnjcaejdpmj" target="_blank">
-  ![Try it now](tryitnowbutton.png "Click here to install from the Chrome Web Store")
-</a>
+<a href="https://chrome.google.com/webstore/detail/inbox-by-gmail-checker/mpjmeeikbbgccbjkbfabocnjcaejdpmj" target="_blank">![Try it now](tryitnowbutton.png "Click here to install from the Chrome Web Store")</a>
 
 Or manually:
 
