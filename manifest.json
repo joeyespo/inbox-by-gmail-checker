@@ -25,6 +25,6 @@
     "notifications",
     "*://inbox.google.com/",
     "*://mail.google.com/"
-   ],
+  ],
   "default_locale": "en"
 }
