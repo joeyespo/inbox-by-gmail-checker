@@ -8,7 +8,7 @@ Displays the number of unread messages in Inbox by Gmail. You can also click the
 
 This is a derivative work of the [Google Mail Checker][] to work with Inbox by Gmail.
 
-![Screenshot](screenshot.png)
+![Screenshot](media/screenshot.png)
 
 
 Features
@@ -23,7 +23,7 @@ Features
 Installation
 ------------
 
-<a href="https://chrome.google.com/webstore/detail/inbox-by-gmail-checker/mpjmeeikbbgccbjkbfabocnjcaejdpmj" target="_blank">![Try it now](tryitnowbutton.png "Click here to install from the Chrome Web Store")</a>
+<a href="https://chrome.google.com/webstore/detail/inbox-by-gmail-checker/mpjmeeikbbgccbjkbfabocnjcaejdpmj" target="_blank">![Try it now](media/tryitnowbutton.png "Click here to install from the Chrome Web Store")</a>
 
 Or manually:
 

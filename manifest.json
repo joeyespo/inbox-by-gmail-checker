@@ -5,11 +5,11 @@
   "description": "Displays the number of unread messages in your Inbox by Gmail. You can also click the button to open your inbox.",
   "author": "Joe Esposito <joe@joeyespo.com>",
   "icons": {
-    "128": "icon_128.png",
-    "256": "icon_256.png"
+    "128": "media/icon_128.png",
+    "256": "media/icon_256.png"
   },
   "browser_action": {
-    "default_icon": "inbox_not_logged_in.png"
+    "default_icon": "media/inbox_not_logged_in.png"
   },
   "background": {
     "persistent": false,

@@ -131,8 +131,8 @@ function updateIcon() {
   if (!localStorage.hasOwnProperty('unreadCount')) {
     chrome.browserAction.setIcon({
       path: {
-        '19': 'inbox_not_logged_in.png',
-        '38': 'inbox_not_logged_in_retina.png'
+        '19': 'media/inbox_not_logged_in.png',
+        '38': 'media/inbox_not_logged_in_retina.png'
       }
     });
     chrome.browserAction.setBadgeBackgroundColor({ color: [190, 190, 190, 230] });
@@ -142,8 +142,8 @@ function updateIcon() {
     var unreadCount = localStorage.unreadCount != '0' ? localStorage.unreadCount : '';
     chrome.browserAction.setIcon({
       path: {
-        '19': quiet && options.useSnoozeColor ? 'inbox_quiet.png' : 'inbox_logged_in.png',
-        '38': quiet && options.useSnoozeColor ? 'inbox_quiet_retina.png' : 'inbox_logged_in_retina.png'
+        '19': quiet && options.useSnoozeColor ? 'media/inbox_quiet.png' : 'media/inbox_logged_in.png',
+        '38': quiet && options.useSnoozeColor ? 'media/inbox_quiet_retina.png' : 'media/inbox_logged_in_retina.png'
       }
     });
     chrome.browserAction.setBadgeBackgroundColor({ color: [0, 56, 206, 255] });
@@ -544,7 +544,7 @@ function notify(count) {
   if (options.useDesktopNotifications && !isQuietTime() && newMessagesCount > 0) {
     chrome.notifications.create('inboxUpdate', {
       type: 'basic',
-      iconUrl: 'icon_256.png',
+      iconUrl: 'media/icon_256.png',
       title: 'Inbox by Gmail Checker',
       isClickable: true,
       contextMessage: 'Click to open Inbox',
