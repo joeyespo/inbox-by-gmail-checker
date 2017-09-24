@@ -1,6 +1,13 @@
 Inbox by Gmail Checker Changelog
 --------------------------------
 
+
+#### Development
+
+- Cleanup: Move images to `media/`
+- Readme: Fix badges
+
+
 #### Version 4.3.0 (2017-06-21)
 
 - Enhancement: Add "Share page via email" extension and optional page context menus ([#25](https://github.com/joeyespo/inbox-by-gmail-checker/issues/25))
